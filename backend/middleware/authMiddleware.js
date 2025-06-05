@@ -18,3 +18,4 @@ const authenticateToken = (req, res, next) => {
 };
 
 module.exports = authenticateToken;
+/*Esse arquivo implementa o middleware de autenticação com JWT. Ele serve para proteger rotas e garantir que apenas usuários autenticados consigam acessá-las. */

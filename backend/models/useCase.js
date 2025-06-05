@@ -36,3 +36,5 @@ const UseCase = sequelize.define(
 );
 
 module.exports = UseCase;
+
+//Esse arquivo define o modelo UseCase usando Sequelize, que mapeia uma tabela do banco de dados chamada use_case. Ele representa os casos de uso no seu sistema

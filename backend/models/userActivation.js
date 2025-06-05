@@ -38,3 +38,12 @@ const UserActivation = sequelize.define(
 );
 
 module.exports = UserActivation;
+
+//Esse arquivo define o modelo UserActivation, que representa uma tabela de códigos de ativação de usuários no banco de dados.
+/*Esse modelo é responsável por:
+
+Armazenar códigos de ativação de conta.
+
+Associar cada código a um usuário específico (userId).
+
+Registrar a data de criação e modificação.*/

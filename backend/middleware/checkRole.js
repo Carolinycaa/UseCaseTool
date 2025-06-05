@@ -13,3 +13,4 @@ const checkRole = (allowedRoles) => {
 };
 
 module.exports = checkRole;
+/*Esse arquivo define o middleware checkRole, responsável por controlar o acesso com base na função (role) do usuário, após ele já ter sido autenticado com JWT. */

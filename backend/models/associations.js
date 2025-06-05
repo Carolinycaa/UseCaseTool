@@ -19,3 +19,5 @@ UseCaseHistory.belongsTo(User, {
   foreignKey: "edited_by",
   as: "editor",
 });
+
+//Esse arquivo configura relacionamentos entre tabelas: user.js, useCase.js e useCaseHistory.js

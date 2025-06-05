@@ -188,6 +188,7 @@ router.get(
         order: [["edited_at", "DESC"]],
         include: {
           model: User,
+          as: "editor",
           attributes: ["id", "username", "email"],
         },
       });
@@ -223,3 +224,4 @@ router.get(
 );
 
 module.exports = router;
+/*Esse arquivo define as rotas da API para gerenciamento de Casos de Uso com controle de acesso baseado em autenticação (JWT) e permissões por função (admin, editor, visualizador). Ele cobre CRUD completo + histórico de alterações. */

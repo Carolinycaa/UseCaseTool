@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const User = require("./user"); // 👈 Certifique-se de importar o modelo User
+const User = require("./user");
 
 const UseCaseHistory = sequelize.define(
   "use_case_history",
@@ -60,5 +60,13 @@ const UseCaseHistory = sequelize.define(
     timestamps: false,
   }
 );
+UseCaseHistory.associate = (models) => {
+  UseCaseHistory.belongsTo(models.User, {
+    foreignKey: "edited_by",
+    as: "editor",
+  });
+};
 
 module.exports = UseCaseHistory;
+
+//Esse arquivo define o modelo UseCaseHistory usando Sequelize. Ele representa o histórico de edições de casos de uso, armazenando versões anteriores ou alterações feitas.

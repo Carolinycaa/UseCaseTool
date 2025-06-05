@@ -38,3 +38,5 @@ const User = sequelize.define(
 );
 
 module.exports = User;
+
+//Esse arquivo define o modelo User usando Sequelize, representando a tabela de usuários do sistema.

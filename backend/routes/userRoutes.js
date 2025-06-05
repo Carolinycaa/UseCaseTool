@@ -47,3 +47,5 @@ router.put(
 );
 
 module.exports = router;
+
+/*Esse arquivo define rotas administrativas para gerenciamento de usuários em uma aplicação Express. Essas rotas são restritas exclusivamente a usuários com o papel de admin. */

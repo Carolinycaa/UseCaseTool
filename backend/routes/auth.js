@@ -223,3 +223,9 @@ router.delete(
 );
 
 module.exports = router;
+
+/*Esse arquivo define um conjunto de rotas de autenticação e gerenciamento de usuários usando Express.js. Ele cobre o fluxo completo de registro, ativação de conta, login e exclusão de usuário.
+
+nodemailer: usado para enviar o e-mail de ativação.
+
+crypto.randomBytes(...): gera um código de ativação aleatório (ex.: a2c9f).*/

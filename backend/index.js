@@ -32,3 +32,8 @@ sequelize
 app.listen(3001, () => {
   console.log("Servidor rodando na porta 3001");
 });
+
+/*Esse é o arquivo principal do backend de Node.js com Express. Ele configura e inicia o servidor, define os middlewares, importa rotas e faz a conexão com o banco de dados. 
+express: framework web para APIs.
+
+cors: permite acesso de outros domínios (útil para frontend separado, como React).*/
