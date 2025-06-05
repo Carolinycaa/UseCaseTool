@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import UseCaseForm from "./UseCaseForm";
 import UseCaseHistoryModal from "./UseCaseHistoryModal";
+import { Link } from "react-router-dom";
 
 export default function UseCasePage() {
   const [useCases, setUseCases] = useState([]);
@@ -48,9 +49,25 @@ export default function UseCasePage() {
     }
   };
 
-  const filteredUseCases = useCases.filter((uc) =>
-    uc.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleLoadUseCase = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/use-cases/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar dados completos do caso de uso.");
+      }
+
+      const fullData = await response.json();
+      setSelectedUseCase(fullData);
+      setShowForm(true);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   const handleSave = async (useCaseData) => {
     const method = useCaseData.id ? "PUT" : "POST";
@@ -101,6 +118,10 @@ export default function UseCasePage() {
     }
   };
 
+  const filteredUseCases = useCases.filter((uc) =>
+    uc.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Casos de Uso</h2>
@@ -146,7 +167,19 @@ export default function UseCasePage() {
             ) : (
               filteredUseCases.map((uc) => (
                 <tr key={uc.id}>
-                  <td>{uc.title}</td>
+                  <td>
+                    <Link
+                      to={`/use-cases/${uc.id}`}
+                      style={{
+                        color: "#007bff",
+                        textDecoration: "underline",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {uc.title}
+                    </Link>
+                  </td>
                   <td>{uc.description?.slice(0, 60)}...</td>
                   <td>
                     {(role === "admin" ||
@@ -154,12 +187,7 @@ export default function UseCasePage() {
                         uc.created_by ===
                           jwtDecode(localStorage.getItem("token")).id)) && (
                       <>
-                        <button
-                          onClick={() => {
-                            setSelectedUseCase(uc);
-                            setShowForm(true);
-                          }}
-                        >
+                        <button onClick={() => handleLoadUseCase(uc.id)}>
                           Editar
                         </button>
                         <button
@@ -212,4 +240,3 @@ export default function UseCasePage() {
     </div>
   );
 }
-/*O componente UseCasePage é a página principal de visualização, criação, edição e gerenciamento de casos de uso para usuários com acesso (admins, editores e visualizadores).  */

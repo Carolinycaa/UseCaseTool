@@ -66,7 +66,7 @@ router.get(
         order: [["createdAt", "DESC"]],
         include: {
           model: User,
-          as: "creator", // 🔧 alias definido na associação
+          as: "creator",
           attributes: ["id", "username", "email"],
         },
       });

@@ -4,14 +4,16 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const token = localStorage.getItem("token");
   const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchUsers = async () => {
     setLoading(true);
     setError("");
+    setSuccess("");
     try {
-      const response = await fetch(`${API_URL}/api/users`, {
+      const response = await fetch(`${API_URL}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -28,16 +30,15 @@ export default function AdminUsersPage() {
   };
 
   useEffect(() => {
-    (async () => {
-      await fetchUsers();
-    })();
+    fetchUsers();
   }, []);
 
   const handleUpdateUserRole = async (userId, newRole) => {
-    if (!window.confirm(`Confirmar mudança de role para ${newRole}?`)) return;
+    if (!window.confirm(`Deseja mudar o papel deste usuário para ${newRole}?`))
+      return;
 
     try {
-      const response = await fetch(`${API_URL}/api/users/${userId}/role`, {
+      const response = await fetch(`${API_URL}/users/${userId}/role`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -45,40 +46,56 @@ export default function AdminUsersPage() {
         },
         body: JSON.stringify({ role: newRole }),
       });
-      if (!response.ok) throw new Error("Erro ao atualizar usuário");
 
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Erro ao atualizar o papel do usuário");
+      }
+
+      setSuccess("Papel atualizado com sucesso.");
       await fetchUsers();
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
     }
   };
 
   return (
-    <div>
-      <h2>Lista de Usuários</h2>
+    <div style={{ padding: "30px" }}>
+      <h2>Gerenciar Usuários</h2>
+
       {loading && <p>Carregando usuários...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <table>
+      {success && <p style={{ color: "green" }}>{success}</p>}
+
+      <table
+        style={{ width: "100%", borderCollapse: "collapse", marginTop: 20 }}
+      >
         <thead>
-          <tr>
-            <th>Usuário</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Ações</th>
+          <tr style={{ backgroundColor: "#f2f2f2" }}>
+            <th style={thStyle}>Nome</th>
+            <th style={thStyle}>Email</th>
+            <th style={thStyle}>Papel</th>
+            <th style={thStyle}>Ações</th>
           </tr>
         </thead>
         <tbody>
           {users.map((u) => (
             <tr key={u.id}>
-              <td>{u.username}</td>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
-              <td>
-                {u.role !== "admin" && (
-                  <button onClick={() => handleUpdateUserRole(u.id, "admin")}>
-                    Tornar Admin
-                  </button>
-                )}
+              <td style={tdStyle}>{u.username}</td>
+              <td style={tdStyle}>{u.email}</td>
+              <td style={tdStyle}>{u.role}</td>
+              <td style={tdStyle}>
+                {["admin", "editor", "visualizador"]
+                  .filter((r) => r !== u.role)
+                  .map((roleOption) => (
+                    <button
+                      key={roleOption}
+                      onClick={() => handleUpdateUserRole(u.id, roleOption)}
+                      style={{ marginRight: 8 }}
+                    >
+                      Tornar {roleOption}
+                    </button>
+                  ))}
               </td>
             </tr>
           ))}
@@ -87,4 +104,14 @@ export default function AdminUsersPage() {
     </div>
   );
 }
-/*Esse componente AdminUsersPage é a interface administrativa para gerenciar os usuários do sistema. Ele se conecta diretamente às rotas protegidas do backend e permite que um administrador visualize todos os usuários e altere o papel (role) de um usuário para "admin". */
+
+const thStyle = {
+  padding: "10px",
+  borderBottom: "2px solid #ddd",
+  textAlign: "left",
+};
+
+const tdStyle = {
+  padding: "10px",
+  borderBottom: "1px solid #ddd",
+};

@@ -104,7 +104,7 @@ export default function AdminUseCases() {
 
       {role === "admin" && !showForm && (
         <div style={styles.actionBar}>
-          <div></div> {/* espaçador à esquerda */}
+          <div></div>
           <button onClick={() => setShowForm(true)} style={styles.createBtn}>
             + Novo Caso de Uso
           </button>
@@ -137,9 +137,20 @@ export default function AdminUseCases() {
           <tbody>
             {useCases.map((uc) => (
               <tr key={uc.id} style={styles.tr}>
-                <td style={styles.td}>{uc.title}</td>
+                <td style={styles.td}>
+                  <Link
+                    to={`/use-cases/${uc.id}`}
+                    style={{
+                      color: "#007bff",
+                      textDecoration: "underline",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {uc.title}
+                  </Link>
+                </td>
                 <td style={styles.td}>{uc.description}</td>
-                <td style={styles.td}>{uc.created_by ?? "N/A"}</td>
+                <td style={styles.td}>{uc.creator?.username || "N/A"}</td>
                 <td style={styles.td}>
                   <button
                     onClick={() => handleEdit(uc.id)}

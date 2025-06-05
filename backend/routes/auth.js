@@ -1,18 +1,20 @@
 require("dotenv").config();
-const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
+const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+
 const User = require("../models/user");
 const UserActivation = require("../models/userActivation");
 const authenticateToken = require("../middleware/authMiddleware");
 const checkRole = require("../middleware/checkRole");
-const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
+// 📧 Configuração do e-mail
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -24,10 +26,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// 🔑 Geração de código de ativação
 const generateActivationCode = () => {
   return crypto.randomBytes(3).toString("hex").slice(0, 5);
 };
 
+// 📤 Envio de e-mail de ativação
 const sendActivationEmail = (email, activationCode) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -44,14 +48,14 @@ const sendActivationEmail = (email, activationCode) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log("Erro ao enviar e-mail: ", error);
+      console.log("Erro ao enviar e-mail:", error);
     } else {
       console.log("E-mail enviado: " + info.response);
     }
   });
 };
 
-// ROTA DE REGISTRO
+// ✅ REGISTRO
 router.post(
   "/register",
   [
@@ -82,7 +86,7 @@ router.post(
         username,
         email,
         password: hashedPassword,
-        role: "visualizador", // mudou para o role correto do seu banco
+        role: "visualizador",
         active: false,
       });
 
@@ -101,13 +105,13 @@ router.post(
     } catch (err) {
       console.error("Erro inesperado:", err);
       return res.status(500).json({
-        errors: [{ msg: err?.message || "Erro desconhecido." }],
+        errors: [{ msg: err.message || "Erro desconhecido." }],
       });
     }
   }
 );
 
-// ROTA DE LOGIN
+// ✅ LOGIN
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -162,7 +166,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ATIVAÇÃO DE USUÁRIO
+// ✅ ATIVAÇÃO
 router.post("/activate", async (req, res) => {
   const { email, code } = req.body;
 
@@ -195,7 +199,7 @@ router.post("/activate", async (req, res) => {
   }
 });
 
-// EXCLUIR USUÁRIO (SOMENTE ADMIN)
+// ✅ EXCLUIR USUÁRIO (admin)
 router.delete(
   "/delete-user/:id",
   authenticateToken,
@@ -223,9 +227,3 @@ router.delete(
 );
 
 module.exports = router;
-
-/*Esse arquivo define um conjunto de rotas de autenticação e gerenciamento de usuários usando Express.js. Ele cobre o fluxo completo de registro, ativação de conta, login e exclusão de usuário.
-
-nodemailer: usado para enviar o e-mail de ativação.
-
-crypto.randomBytes(...): gera um código de ativação aleatório (ex.: a2c9f).*/

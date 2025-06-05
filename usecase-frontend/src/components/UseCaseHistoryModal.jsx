@@ -59,7 +59,7 @@ export default function UseCaseHistoryModal({ useCaseId, onClose }) {
         style={{
           background: "#fff",
           padding: 24,
-          maxWidth: "800px",
+          maxWidth: "900px",
           width: "100%",
           maxHeight: "90vh",
           overflowY: "auto",
@@ -101,21 +101,59 @@ export default function UseCaseHistoryModal({ useCaseId, onClose }) {
                 style={{
                   padding: "16px",
                   marginBottom: 15,
-                  backgroundColor: "#f8f8f8",
+                  backgroundColor: "#f8f9fa",
                   borderRadius: 8,
-                  border: "1px solid #ddd",
+                  border: "1px solid #ccc",
                 }}
               >
-                <h4 style={{ marginBottom: 5 }}>{item.title}</h4>
-                <p style={{ fontSize: 14, color: "#333" }}>
+                <h4 style={{ marginBottom: 5, color: "#007bff" }}>
+                  {item.title}
+                </h4>
+                <p style={{ fontSize: 14 }}>
                   <strong>Editado por:</strong>{" "}
-                  <em>{item.editor?.username || "Desconhecido"}</em>
-                  <br />
+                  {item.editor?.username || "Desconhecido"} <br />
                   <small style={{ color: "#666" }}>
                     {new Date(item.edited_at).toLocaleString()}
                   </small>
                 </p>
-                <p style={{ marginTop: 10 }}>{item.description}</p>
+                <div style={{ marginTop: 10 }}>
+                  {item.description && (
+                    <p>
+                      <strong>Descrição:</strong> {item.description}
+                    </p>
+                  )}
+                  {item.actor && (
+                    <p>
+                      <strong>Ator:</strong> {item.actor}
+                    </p>
+                  )}
+                  {item.preconditions && (
+                    <p>
+                      <strong>Pré-condições:</strong> {item.preconditions}
+                    </p>
+                  )}
+                  {item.postconditions && (
+                    <p>
+                      <strong>Pós-condições:</strong> {item.postconditions}
+                    </p>
+                  )}
+                  {item.main_flow && (
+                    <p>
+                      <strong>Fluxo principal:</strong> {item.main_flow}
+                    </p>
+                  )}
+                  {item.alternative_flows && (
+                    <p>
+                      <strong>Fluxos alternativos:</strong>{" "}
+                      {item.alternative_flows}
+                    </p>
+                  )}
+                  {item.exceptions && (
+                    <p>
+                      <strong>Exceções:</strong> {item.exceptions}
+                    </p>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
