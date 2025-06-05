@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -8,34 +9,33 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const isFormValid = email.trim() !== "" && password.trim() !== "";
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (!email.trim() || !password.trim()) {
+      setErrorMsg("Preencha todos os campos");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const API_URL = process.env.REACT_APP_API_URL;
 
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post(`${API_URL}/auth/login`, {
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        const msg = data.errors ? data.errors[0].msg : "Erro no login.";
-        setErrorMsg(msg);
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (err) {
-      setErrorMsg("Erro de conexão. Verifique sua internet.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        setErrorMsg(err.response.data.errors[0].msg);
+      } else {
+        setErrorMsg("Erro de conexão. Verifique sua internet.");
+      }
     } finally {
       setLoading(false);
     }
@@ -101,16 +101,15 @@ export default function Login() {
 
         <button
           type="submit"
-          disabled={!isFormValid || loading}
           style={{
             width: "100%",
             padding: "12px",
             borderRadius: "10px",
             border: "none",
-            backgroundColor: !isFormValid || loading ? "#a0a0a0" : "#007bff",
+            backgroundColor: loading ? "#a0a0a0" : "#007bff",
             color: "#fff",
             fontWeight: "700",
-            cursor: !isFormValid || loading ? "not-allowed" : "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             fontSize: "16px",
             transition: "background-color 0.3s",
           }}
@@ -132,7 +131,6 @@ export default function Login() {
   );
 }
 
-// Estilos reutilizáveis
 const labelStyle = {
   display: "block",
   marginBottom: "8px",
@@ -150,4 +148,3 @@ const inputStyle = {
   transition: "border-color 0.3s",
   boxSizing: "border-box",
 };
-/*O componente Login é responsável por autenticar o usuário no sistema. Ele apresenta um formulário de login, envia as credenciais para a API e, se estiverem corretas, salva o token no localStorage e redireciona para o Dashboard. */

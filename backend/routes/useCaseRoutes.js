@@ -23,10 +23,18 @@ router.post(
       exceptions,
     } = req.body;
 
-    if (!title || !description) {
+    if (
+      !title ||
+      !description ||
+      !actor ||
+      !preconditions ||
+      !postconditions ||
+      !main_flow ||
+      !alternative_flows
+    ) {
       return res
         .status(400)
-        .json({ error: "Título e descrição são obrigatórios." });
+        .json({ error: "Todos os campos (exceto exceções) são obrigatórios." });
     }
 
     try {

@@ -142,13 +142,14 @@ export default function AdminUseCases() {
                     to={`/use-cases/${uc.id}`}
                     style={{
                       color: "#007bff",
-                      textDecoration: "underline",
                       fontWeight: "bold",
+                      textDecoration: "none",
                     }}
                   >
                     {uc.title}
                   </Link>
                 </td>
+
                 <td style={styles.td}>{uc.description}</td>
                 <td style={styles.td}>{uc.creator?.username || "N/A"}</td>
                 <td style={styles.td}>

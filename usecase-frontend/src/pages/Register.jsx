@@ -79,90 +79,69 @@ export default function Register() {
         Registrar
       </h2>
       <form onSubmit={handleSubmit} noValidate>
-        {[
-          {
-            label: "Nome de usuário",
-            name: "username",
-            type: "text",
-            placeholder: "Digite seu nome de usuário",
-          },
-          {
-            label: "E-mail",
-            name: "email",
-            type: "email",
-            placeholder: "Digite seu e-mail",
-          },
-          {
-            label: "Senha",
-            name: "password",
-            type: "password",
-            placeholder: "Digite sua senha",
-          },
-        ].map(({ label, name, type, placeholder }) => (
-          <div key={name}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "8px",
-                fontWeight: "600",
-                color: "#555",
-              }}
-            >
-              {label}
-            </label>
-            <input
-              type={type}
-              name={name}
-              placeholder={placeholder}
-              value={formData[name]}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-                marginBottom: "20px",
-                fontSize: "14px",
-                outline: "none",
-                transition: "border-color 0.3s",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = "#007bff")}
-              onBlur={(e) => (e.target.style.borderColor = "#ccc")}
-            />
-          </div>
-        ))}
+        <div>
+          <label htmlFor="username" style={labelStyle}>
+            Nome de usuário
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Digite seu nome de usuário"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
+        </div>
 
-        <label
-          style={{
-            display: "block",
-            marginBottom: "8px",
-            fontWeight: "600",
-            color: "#555",
-          }}
-        >
-          Confirmar senha
-        </label>
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirme sua senha"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            marginBottom: "20px",
-            fontSize: "14px",
-            outline: "none",
-            transition: "border-color 0.3s",
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "#007bff")}
-          onBlur={(e) => (e.target.style.borderColor = "#ccc")}
-        />
+        <div>
+          <label htmlFor="email" style={labelStyle}>
+            E-mail
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Digite seu e-mail"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password" style={labelStyle}>
+            Senha
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Digite sua senha"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="confirmPassword" style={labelStyle}>
+            Confirmar senha
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirme sua senha"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            style={inputStyle}
+          />
+        </div>
 
         {message && (
           <p
@@ -208,3 +187,21 @@ export default function Register() {
     </div>
   );
 }
+
+const labelStyle = {
+  display: "block",
+  marginBottom: "8px",
+  fontWeight: "600",
+  color: "#555",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "10px 12px",
+  borderRadius: "8px",
+  border: "1px solid #ccc",
+  marginBottom: "20px",
+  fontSize: "14px",
+  outline: "none",
+  transition: "border-color 0.3s",
+};

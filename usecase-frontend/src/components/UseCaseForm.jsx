@@ -58,8 +58,16 @@ export default function UseCaseForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title.trim() || !formData.description.trim()) {
-      setError("Título e descrição são obrigatórios.");
+    if (
+      !formData.title.trim() ||
+      !formData.description.trim() ||
+      !formData.actor.trim() ||
+      !formData.preconditions.trim() ||
+      !formData.postconditions.trim() ||
+      !formData.main_flow.trim() ||
+      !formData.alternative_flows.trim()
+    ) {
+      setError("Preencha todos os campos obrigatórios.");
       return;
     }
 
