@@ -15,6 +15,31 @@ const UseCase = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    actor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    preconditions: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    postconditions: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    main_flow: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    alternative_flows: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    exceptions: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     created_by: {
       type: DataTypes.INTEGER,
@@ -31,10 +56,8 @@ const UseCase = sequelize.define(
   },
   {
     tableName: "use_case",
-    timestamps: false, // já temos created_at, updated_at manualmente
+    timestamps: false,
   }
 );
 
 module.exports = UseCase;
-
-//Esse arquivo define o modelo UseCase usando Sequelize, que mapeia uma tabela do banco de dados chamada use_case. Ele representa os casos de uso no seu sistema

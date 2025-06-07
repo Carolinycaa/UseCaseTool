@@ -20,7 +20,7 @@ export default function UseCaseList({ useCases, onEdit, onDelete }) {
   }, []);
 
   if (!useCases || useCases.length === 0) {
-    return <p>Nenhum caso de uso encontrado.</p>;
+    return <p style={styles.noCases}>Nenhum caso de uso encontrado.</p>;
   }
 
   const handleDelete = (id) => {
@@ -30,49 +30,26 @@ export default function UseCaseList({ useCases, onEdit, onDelete }) {
   };
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <h3 style={{ marginBottom: 10 }}>Seus Casos de Uso</h3>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+    <div style={styles.container}>
+      <h3 style={styles.title}>Seus Casos de Uso</h3>
+      <ul style={styles.list}>
         {useCases.map((uc) => (
-          <li
-            key={uc.id}
-            style={{
-              borderBottom: "1px solid #ddd",
-              padding: "12px 0",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <strong style={{ fontSize: "1.1rem" }}>
-              <Link
-                to={`/use-cases/${uc.id}`}
-                style={{
-                  color: "#007bff",
-                  textDecoration: "none",
-                  fontWeight: "500",
-                }}
-              >
+          <li key={uc.id} style={styles.card}>
+            <strong style={styles.cardTitle}>
+              <Link to={`/use-cases/${uc.id}`} style={styles.link}>
                 {uc.title}
               </Link>
             </strong>
 
-            <p style={{ margin: "6px 0" }}>{uc.description}</p>
+            <p style={styles.description}>{uc.description}</p>
 
-            <div style={{ marginTop: 8 }}>
+            <div style={styles.actions}>
               {(role === "editor" || role === "admin") && (
                 <>
                   <button
                     onClick={() => onEdit(uc)}
                     aria-label={`Editar caso de uso ${uc.title}`}
-                    style={{
-                      background: "#007bff",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                      marginRight: 6,
-                    }}
+                    style={{ ...styles.button, backgroundColor: "#6c3fc9" }}
                   >
                     Editar
                   </button>
@@ -80,15 +57,7 @@ export default function UseCaseList({ useCases, onEdit, onDelete }) {
                   <button
                     onClick={() => handleDelete(uc.id)}
                     aria-label={`Excluir caso de uso ${uc.title}`}
-                    style={{
-                      background: "#dc3545",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                      marginRight: 6,
-                    }}
+                    style={{ ...styles.button, backgroundColor: "#d9534f" }}
                   >
                     Excluir
                   </button>
@@ -99,14 +68,7 @@ export default function UseCaseList({ useCases, onEdit, onDelete }) {
                 <button
                   onClick={() => setHistoryUseCaseId(uc.id)}
                   aria-label={`Ver histórico do caso de uso ${uc.title}`}
-                  style={{
-                    background: "#17a2b8",
-                    color: "#fff",
-                    border: "none",
-                    padding: "6px 12px",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                  }}
+                  style={{ ...styles.button, backgroundColor: "#17a2b8" }}
                 >
                   Histórico
                 </button>
@@ -125,3 +87,64 @@ export default function UseCaseList({ useCases, onEdit, onDelete }) {
     </div>
   );
 }
+
+const styles = {
+  container: {
+    marginTop: "20px",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  title: {
+    fontSize: "20px",
+    marginBottom: "16px",
+    color: "#6c3fc9",
+  },
+  noCases: {
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    fontSize: "16px",
+    color: "#555",
+    textAlign: "center",
+    marginTop: "40px",
+  },
+  list: {
+    listStyle: "none",
+    padding: 0,
+    margin: 0,
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: "12px",
+    padding: "16px",
+    marginBottom: "16px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+    border: "1px solid #eee",
+  },
+  cardTitle: {
+    fontSize: "16px",
+    fontWeight: "600",
+    marginBottom: "6px",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+  },
+  description: {
+    fontSize: "14px",
+    color: "#555",
+    marginBottom: "10px",
+  },
+  actions: {
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
+  },
+  button: {
+    color: "#fff",
+    border: "none",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
+};

@@ -20,47 +20,24 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div
-      style={{
-        maxWidth: "600px",
-        margin: "60px auto",
-        padding: "40px",
-        borderRadius: "16px",
-        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#f9f9f9",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        textAlign: "center",
-      }}
-    >
-      <h2 style={{ color: "#007bff", marginBottom: "10px" }}>
-        👋 Bem-vindo, {userInfo.username}!
-      </h2>
+    <div style={styles.container}>
+      <h2 style={styles.title}>👋 Bem-vindo, {userInfo.username}!</h2>
 
-      <p style={{ fontSize: "16px", color: "#555" }}>
+      <p style={styles.roleText}>
         Sua função no sistema é:{" "}
-        <strong style={{ color: "#333" }}>{userInfo.role}</strong>.
+        <strong style={styles.roleHighlight}>{userInfo.role}</strong>.
       </p>
 
       {userInfo.role === "admin" && (
         <div style={{ marginTop: "30px" }}>
           <Link
             to="/admin"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "12px 20px",
-              backgroundColor: "#007bff",
-              color: "#fff",
-              textDecoration: "none",
-              borderRadius: "8px",
-              fontWeight: "600",
-              transition: "background-color 0.3s",
-            }}
+            style={styles.button}
             onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#0056b3")
+              (e.currentTarget.style.backgroundColor = "#5a2ebc")
             }
             onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#007bff")
+              (e.currentTarget.style.backgroundColor = "#6c3fc9")
             }
           >
             <FaUserShield style={{ marginRight: "10px" }} />
@@ -71,3 +48,41 @@ export default function Dashboard() {
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "600px",
+    margin: "60px auto",
+    padding: "40px",
+    borderRadius: "16px",
+    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    backgroundColor: "#ffffff",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    textAlign: "center",
+  },
+  title: {
+    color: "#6c3fc9",
+    marginBottom: "12px",
+    fontSize: "24px",
+  },
+  roleText: {
+    fontSize: "16px",
+    color: "#555",
+  },
+  roleHighlight: {
+    color: "#333",
+    fontWeight: "600",
+  },
+  button: {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "12px 20px",
+    backgroundColor: "#6c3fc9",
+    color: "#fff",
+    textDecoration: "none",
+    borderRadius: "10px",
+    fontWeight: "600",
+    fontSize: "15px",
+    transition: "background-color 0.3s",
+  },
+};

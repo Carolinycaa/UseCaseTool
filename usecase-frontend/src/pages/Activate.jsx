@@ -34,7 +34,6 @@ export default function Activate() {
       setMessage(response.data.message || "Conta ativada com sucesso.");
       setSuccess(true);
 
-      // Pequeno delay para usuário ver a mensagem antes de redirecionar
       setTimeout(() => {
         navigate("/login");
       }, 1500);
@@ -51,118 +50,144 @@ export default function Activate() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "50px auto",
-        padding: "30px 25px",
-        borderRadius: "12px",
-        boxShadow: "0 4px 15px rgba(0,0,0,0.15)",
-        backgroundColor: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "25px", color: "#222" }}>
-        Ativar Conta
-      </h2>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Ativar Conta</h2>
 
-      <form onSubmit={handleSubmit} aria-label="Formulário de ativação">
-        <label htmlFor="email" style={labelStyle}>
-          E-mail
-        </label>
-        <input
-          id="email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          placeholder="Seu e-mail"
-          style={inputStyle}
-          aria-required="true"
-          aria-label="Email"
-        />
+        <form onSubmit={handleSubmit} aria-label="Formulário de ativação">
+          <label htmlFor="email" style={styles.label}>
+            E-mail
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            placeholder="Seu e-mail"
+            style={styles.input}
+            aria-required="true"
+            aria-label="Email"
+          />
 
-        <label htmlFor="code" style={labelStyle}>
-          Código de Ativação
-        </label>
-        <input
-          id="code"
-          type="text"
-          name="code"
-          value={formData.code}
-          onChange={handleChange}
-          required
-          placeholder="Digite o código recebido"
-          style={inputStyle}
-          aria-required="true"
-          aria-label="Código de Ativação"
-        />
+          <label htmlFor="code" style={styles.label}>
+            Código de Ativação
+          </label>
+          <input
+            id="code"
+            type="text"
+            name="code"
+            value={formData.code}
+            onChange={handleChange}
+            required
+            placeholder="Digite o código recebido"
+            style={styles.input}
+            aria-required="true"
+            aria-label="Código de Ativação"
+          />
 
-        {message && (
-          <p
-            role="alert"
+          {message && (
+            <p
+              role="alert"
+              style={{
+                color: success ? "green" : "#d9534f",
+                marginBottom: "15px",
+                fontWeight: "600",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
+            >
+              {message}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
             style={{
-              color: success ? "green" : "red",
-              marginBottom: "15px",
-              fontWeight: "600",
-              textAlign: "center",
+              ...styles.button,
+              backgroundColor: loading ? "#b9a5df" : "#6c3fc9",
+              cursor: loading ? "not-allowed" : "pointer",
             }}
+            aria-busy={loading}
           >
-            {message}
-          </p>
-        )}
+            {loading ? "Ativando..." : "Ativar Conta"}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            ...buttonStyle,
-            backgroundColor: loading ? "#a0a0a0" : "#007bff",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-          aria-busy={loading}
-        >
-          {loading ? "Ativando..." : "Ativar Conta"}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 20, textAlign: "center", color: "#555" }}>
-        Já ativou sua conta?{" "}
-        <Link to="/login" style={{ color: "#007bff", textDecoration: "none" }}>
-          Faça login
-        </Link>
-      </p>
+        <p style={styles.footerText}>
+          Já ativou sua conta?{" "}
+          <Link to="/login" style={styles.link}>
+            Faça login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
 
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontWeight: "600",
-  color: "#555",
+const styles = {
+  container: {
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: "40px 30px",
+    borderRadius: "16px",
+    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    maxWidth: "420px",
+    width: "100%",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "25px",
+    color: "#6c3fc9",
+    fontSize: "24px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    color: "#555",
+    fontSize: "14px",
+  },
+  input: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    outline: "none",
+    marginBottom: "20px",
+    transition: "border-color 0.3s",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "none",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "16px",
+    transition: "background-color 0.3s",
+  },
+  footerText: {
+    marginTop: "20px",
+    textAlign: "center",
+    color: "#555",
+    fontSize: "14px",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+    fontWeight: "600",
+  },
 };
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: "8px",
-  border: "1px solid #ccc",
-  marginBottom: "20px",
-  fontSize: "14px",
-  outline: "none",
-  transition: "border-color 0.3s",
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "12px",
-  borderRadius: "10px",
-  border: "none",
-  color: "#fff",
-  fontWeight: "700",
-  fontSize: "16px",
-  transition: "background-color 0.3s",
-};
-/*O componente Activate é responsável por ativar a conta de um usuário recém-registrado, usando o código de ativação enviado por e-mail. Ele integra diretamente com o endpoint /auth/activate do backend e possui uma experiência de usuário bem cuidada, com validação, feedback e redirecionamento. */
+  

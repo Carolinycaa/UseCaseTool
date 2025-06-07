@@ -123,15 +123,29 @@ export default function UseCasePage() {
   );
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Casos de Uso</h2>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+        maxWidth: "1000px",
+        margin: "0 auto",
+      }}
+    >
+      <h2 style={{ color: "#6c3fc9", marginBottom: "20px" }}>Casos de Uso</h2>
 
       <input
         type="text"
         placeholder="Buscar por título..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: 10, width: "100%", padding: 6 }}
+        style={{
+          marginBottom: "20px",
+          width: "100%",
+          padding: "10px 12px",
+          borderRadius: "10px",
+          border: "1px solid #ccc",
+          fontSize: "15px",
+        }}
       />
 
       {(role === "admin" || role === "editor") && (
@@ -140,7 +154,16 @@ export default function UseCasePage() {
             setSelectedUseCase(null);
             setShowForm(true);
           }}
-          style={{ marginBottom: 10 }}
+          style={{
+            backgroundColor: "#6c3fc9",
+            color: "#fff",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: "600",
+            cursor: "pointer",
+            marginBottom: "20px",
+          }}
         >
           Novo Caso de Uso
         </button>
@@ -151,70 +174,77 @@ export default function UseCasePage() {
       {loading ? (
         <p>Carregando casos de uso...</p>
       ) : (
-        <table border="1" cellPadding="6" style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Descrição</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUseCases.length === 0 ? (
-              <tr>
-                <td colSpan="3">Nenhum caso de uso encontrado.</td>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ backgroundColor: "#f4f4f4" }}>
+                <th style={styles.th}>Título</th>
+                <th style={styles.th}>Descrição</th>
+                <th style={styles.th}>Criado por</th>
+                <th style={styles.th}>Ações</th>
               </tr>
-            ) : (
-              filteredUseCases.map((uc) => (
-                <tr key={uc.id}>
-                  <td>
-                    <Link
-                      to={`/use-cases/${uc.id}`}
-                      style={{
-                        color: "#007bff",
-                        textDecoration: "underline",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {uc.title}
-                    </Link>
-                  </td>
-                  <td>{uc.description?.slice(0, 60)}...</td>
-                  <td>
-                    {(role === "admin" ||
-                      (role === "editor" &&
-                        uc.created_by ===
-                          jwtDecode(localStorage.getItem("token")).id)) && (
-                      <>
-                        <button onClick={() => handleLoadUseCase(uc.id)}>
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(uc.id)}
-                          style={{ marginLeft: 6, color: "red" }}
-                        >
-                          Excluir
-                        </button>
-                      </>
-                    )}
-                    {role === "admin" && (
-                      <button
-                        onClick={() => {
-                          setSelectedHistoryId(uc.id);
-                          setShowHistoryModal(true);
-                        }}
-                        style={{ marginLeft: 6 }}
-                      >
-                        Ver Histórico
-                      </button>
-                    )}
+            </thead>
+
+            <tbody>
+              {filteredUseCases.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{ padding: "16px", textAlign: "center" }}
+                  >
+                    Nenhum caso de uso encontrado.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filteredUseCases.map((uc) => (
+                  <tr key={uc.id} style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={styles.td}>
+                      <Link to={`/use-cases/${uc.id}`} style={styles.link}>
+                        {uc.title}
+                      </Link>
+                    </td>
+                    <td style={styles.td}>{uc.description?.slice(0, 60)}...</td>
+                    <td style={styles.td}>
+                      {uc.creator?.username || "Desconhecido"}
+                    </td>
+                    <td style={styles.td}>
+                      {(role === "admin" ||
+                        (role === "editor" &&
+                          uc.created_by ===
+                            jwtDecode(localStorage.getItem("token")).id)) && (
+                        <>
+                          <button
+                            onClick={() => handleLoadUseCase(uc.id)}
+                            style={styles.btnPrimary}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(uc.id)}
+                            style={styles.btnDanger}
+                          >
+                            Excluir
+                          </button>
+                        </>
+                      )}
+                      {role === "admin" && (
+                        <button
+                          onClick={() => {
+                            setSelectedHistoryId(uc.id);
+                            setShowHistoryModal(true);
+                          }}
+                          style={styles.btnInfo}
+                        >
+                          Ver Histórico
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {showForm && (
@@ -240,3 +270,50 @@ export default function UseCasePage() {
     </div>
   );
 }
+
+const styles = {
+  th: {
+    padding: "12px",
+    textAlign: "left",
+    fontWeight: "600",
+    color: "#555",
+    borderBottom: "2px solid #ddd",
+  },
+  td: {
+    padding: "12px",
+    verticalAlign: "top",
+    color: "#333",
+    fontSize: "14px",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+    fontWeight: "500",
+  },
+  btnPrimary: {
+    backgroundColor: "#6c3fc9",
+    color: "#fff",
+    border: "none",
+    padding: "6px 12px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    marginRight: "6px",
+  },
+  btnDanger: {
+    backgroundColor: "#dc3545",
+    color: "#fff",
+    border: "none",
+    padding: "6px 12px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    marginRight: "6px",
+  },
+  btnInfo: {
+    backgroundColor: "#17a2b8",
+    color: "#fff",
+    border: "none",
+    padding: "6px 12px",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+};

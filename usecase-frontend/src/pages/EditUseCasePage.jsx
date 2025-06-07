@@ -56,11 +56,13 @@ export default function EditUseCasePage() {
     navigate("/admin/usecases");
   };
 
-  if (loading) return <p>Carregando caso de uso...</p>;
-  if (error) return <p style={{ color: "red" }}>Erro: {error}</p>;
+  if (loading)
+    return <p style={styles.loadingText}>Carregando caso de uso...</p>;
+
+  if (error) return <p style={styles.errorText}>Erro: {error}</p>;
 
   return (
-    <div style={{ maxWidth: "700px", margin: "40px auto" }}>
+    <div style={styles.container}>
       <UseCaseForm
         useCase={useCase}
         onSave={handleSave}
@@ -69,4 +71,27 @@ export default function EditUseCasePage() {
     </div>
   );
 }
-/*O componente EditUseCasePage é responsável por editar um caso de uso específico no sistema. Ele usa o ID presente na URL para buscar os dados do caso e exibe um formulário para edição. */
+
+const styles = {
+  container: {
+    maxWidth: "720px",
+    margin: "40px auto",
+    padding: "0 20px",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  loadingText: {
+    textAlign: "center",
+    marginTop: "80px",
+    fontSize: "18px",
+    color: "#6c3fc9",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  errorText: {
+    textAlign: "center",
+    marginTop: "80px",
+    fontSize: "16px",
+    color: "#d9534f",
+    fontWeight: "600",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+};

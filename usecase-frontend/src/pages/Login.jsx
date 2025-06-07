@@ -42,109 +42,133 @@ export default function Login() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "420px",
-        margin: "60px auto",
-        padding: "35px 30px",
-        borderRadius: "12px",
-        boxShadow: "0 4px 18px rgba(0,0,0,0.1)",
-        backgroundColor: "#ffffff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "25px", color: "#222" }}>
-        Entrar na Conta
-      </h2>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Entrar na Conta</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="email" style={labelStyle}>
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={inputStyle}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.inputGroup}>
+            <label htmlFor="email" style={styles.label}>
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label htmlFor="password" style={labelStyle}>
-            Senha
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={inputStyle}
-          />
-        </div>
+          <div style={styles.inputGroup}>
+            <label htmlFor="password" style={styles.label}>
+              Senha
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        {errorMsg && (
-          <p
+          {errorMsg && <p style={styles.errorMsg}>{errorMsg}</p>}
+
+          <button
+            type="submit"
             style={{
-              color: "red",
-              marginBottom: "15px",
-              fontWeight: "600",
-              textAlign: "center",
+              ...styles.button,
+              backgroundColor: loading ? "#b9a5df" : "#6c3fc9",
+              cursor: loading ? "not-allowed" : "pointer",
             }}
           >
-            {errorMsg}
-          </p>
-        )}
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "10px",
-            border: "none",
-            backgroundColor: loading ? "#a0a0a0" : "#007bff",
-            color: "#fff",
-            fontWeight: "700",
-            cursor: loading ? "not-allowed" : "pointer",
-            fontSize: "16px",
-            transition: "background-color 0.3s",
-          }}
-        >
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 20, textAlign: "center", color: "#555" }}>
-        Não tem uma conta?{" "}
-        <Link
-          to="/register"
-          style={{ color: "#007bff", textDecoration: "none" }}
-        >
-          Registre-se
-        </Link>
-      </p>
+        <p style={styles.footerText}>
+          Não tem uma conta?{" "}
+          <Link to="/register" style={styles.link}>
+            Registre-se
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
 
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontWeight: "600",
-  color: "#555",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: "8px",
-  border: "1px solid #ccc",
-  fontSize: "14px",
-  outline: "none",
-  transition: "border-color 0.3s",
-  boxSizing: "border-box",
+const styles = {
+  container: {
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: "40px 30px",
+    borderRadius: "16px",
+    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    maxWidth: "420px",
+    width: "100%",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "25px",
+    color: "#6c3fc9",
+    fontSize: "24px",
+  },
+  inputGroup: {
+    marginBottom: "20px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    color: "#555",
+    fontSize: "14px",
+  },
+  input: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    outline: "none",
+    transition: "border-color 0.3s",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "none",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "16px",
+    transition: "background-color 0.3s",
+  },
+  errorMsg: {
+    color: "#d9534f",
+    marginBottom: "15px",
+    fontWeight: "600",
+    textAlign: "center",
+    fontSize: "14px",
+  },
+  footerText: {
+    marginTop: "20px",
+    textAlign: "center",
+    color: "#555",
+    fontSize: "14px",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+    fontWeight: "600",
+  },
 };

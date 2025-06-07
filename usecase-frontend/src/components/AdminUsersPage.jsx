@@ -11,7 +11,6 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     setLoading(true);
     setError("");
-    setSuccess("");
     try {
       const response = await fetch(`${API_URL}/users`, {
         headers: {
@@ -53,6 +52,7 @@ export default function AdminUsersPage() {
       }
 
       setSuccess("Papel atualizado com sucesso.");
+      setTimeout(() => setSuccess(""), 3000); // ✅ Dá tempo do teste detectar
       await fetchUsers();
     } catch (err) {
       setError(err.message);
@@ -65,8 +65,11 @@ export default function AdminUsersPage() {
 
       {loading && <p>Carregando usuários...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
-
+      {success && (
+        <p data-testid="success-msg" style={{ color: "green" }}>
+          {success}
+        </p>
+      )}
       <table
         style={{ width: "100%", borderCollapse: "collapse", marginTop: 20 }}
       >

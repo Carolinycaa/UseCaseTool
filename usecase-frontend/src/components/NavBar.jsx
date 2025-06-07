@@ -26,41 +26,65 @@ export default function NavBar() {
   }, [location.pathname]);
 
   return (
-    <nav style={{ padding: "10px", backgroundColor: "#f0f0f0" }}>
-      {!token ? (
-        <>
-          <Link to="/" style={{ marginRight: 10 }}>
-            Login
-          </Link>
-          <Link to="/register" style={{ marginRight: 10 }}>
-            Registrar
-          </Link>
-          <Link to="/activate">Ativar Conta</Link>
-        </>
-      ) : (
-        <>
-          <Link to="/dashboard" style={{ marginRight: 10 }}>
-            Dashboard
-          </Link>
-
-          {/* Mostrar "Use Cases" somente para editores e visualizadores */}
-          {role !== "admin" && (
-            <Link to="/use-cases" style={{ marginRight: 10 }}>
-              Use Cases
+    <nav style={styles.nav}>
+      <div style={styles.linkContainer}>
+        {!token ? (
+          <>
+            <Link to="/" style={styles.link}>
+              Login
             </Link>
-          )}
-
-          {/* Painel Admin */}
-          {role === "admin" && (
-            <Link to="/admin" style={{ marginRight: 10 }}>
-              Admin
+            <Link to="/register" style={styles.link}>
+              Registrar
             </Link>
-          )}
+            <Link to="/activate" style={styles.link}>
+              Ativar Conta
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/dashboard" style={styles.link}>
+              Dashboard
+            </Link>
 
-          <Link to="/logout">Sair</Link>
-        </>
-      )}
+            {role !== "admin" && (
+              <Link to="/use-cases" style={styles.link}>
+                Use Cases
+              </Link>
+            )}
+
+            {role === "admin" && (
+              <Link to="/admin" style={styles.link}>
+                Admin
+              </Link>
+            )}
+
+            <Link to="/logout" style={styles.link}>
+              Sair
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
-/*Esse componente NavBar define a barra de navegação principal do seu frontend, exibindo links diferentes dependendo se o usuário está logado e qual é o seu papel (role). */
+
+const styles = {
+  nav: {
+    backgroundColor: "#ffffff",
+    padding: "12px 24px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  linkContainer: {
+    display: "flex",
+    gap: "16px",
+    alignItems: "center",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+    fontWeight: "600",
+    fontSize: "15px",
+    transition: "color 0.2s",
+  },
+};

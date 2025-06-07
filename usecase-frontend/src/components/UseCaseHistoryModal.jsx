@@ -42,81 +42,41 @@ export default function UseCaseHistoryModal({ useCaseId, onClose }) {
     <div
       id="modal-backdrop"
       onClick={handleBackdropClick}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
+      style={styles.backdrop}
     >
-      <div
-        style={{
-          background: "#fff",
-          padding: 24,
-          maxWidth: "900px",
-          width: "100%",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          position: "relative",
-          borderRadius: 10,
-          boxShadow: "0 0 15px rgba(0,0,0,0.3)",
-        }}
-      >
+      <div style={styles.modal}>
         <button
           onClick={onClose}
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            background: "transparent",
-            border: "none",
-            fontSize: 22,
-            cursor: "pointer",
-          }}
+          style={styles.closeButton}
           aria-label="Fechar modal"
         >
           ×
         </button>
 
-        <h2 style={{ marginBottom: 20 }}>Histórico de Alterações</h2>
+        <h2 style={styles.title}>Histórico de Alterações</h2>
 
-        {loading && <p>Carregando...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {loading && <p style={styles.loading}>Carregando...</p>}
+        {error && <p style={styles.error}>Erro: {error}</p>}
 
         {!loading && !error && history.length === 0 && (
-          <p>Nenhuma alteração registrada para este caso de uso.</p>
+          <p style={styles.noRecords}>
+            Nenhuma alteração registrada para este caso de uso.
+          </p>
         )}
 
         {!loading && !error && history.length > 0 && (
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <ul style={styles.list}>
             {history.map((item) => (
-              <li
-                key={item.id}
-                style={{
-                  padding: "16px",
-                  marginBottom: 15,
-                  backgroundColor: "#f8f9fa",
-                  borderRadius: 8,
-                  border: "1px solid #ccc",
-                }}
-              >
-                <h4 style={{ marginBottom: 5, color: "#007bff" }}>
-                  {item.title}
-                </h4>
-                <p style={{ fontSize: 14 }}>
+              <li key={item.id} style={styles.card}>
+                <h4 style={styles.cardTitle}>{item.title}</h4>
+                <p style={styles.meta}>
                   <strong>Editado por:</strong>{" "}
                   {item.editor?.username || "Desconhecido"} <br />
-                  <small style={{ color: "#666" }}>
+                  <small style={styles.date}>
                     {new Date(item.edited_at).toLocaleString()}
                   </small>
                 </p>
-                <div style={{ marginTop: 10 }}>
+                <div style={styles.details}>
                   {item.description && (
                     <p>
                       <strong>Descrição:</strong> {item.description}
@@ -162,3 +122,90 @@ export default function UseCaseHistoryModal({ useCaseId, onClose }) {
     </div>
   );
 }
+
+const styles = {
+  backdrop: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  modal: {
+    background: "#ffffff",
+    padding: "32px 24px",
+    maxWidth: "900px",
+    width: "100%",
+    maxHeight: "90vh",
+    overflowY: "auto",
+    position: "relative",
+    borderRadius: "16px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    background: "transparent",
+    border: "none",
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#6c3fc9",
+    cursor: "pointer",
+  },
+  title: {
+    fontSize: "22px",
+    marginBottom: "24px",
+    color: "#6c3fc9",
+  },
+  loading: {
+    textAlign: "center",
+    color: "#555",
+  },
+  error: {
+    textAlign: "center",
+    color: "#d9534f",
+    fontWeight: "600",
+  },
+  noRecords: {
+    textAlign: "center",
+    color: "#555",
+    fontSize: "15px",
+  },
+  list: {
+    listStyle: "none",
+    padding: 0,
+    margin: 0,
+  },
+  card: {
+    padding: "20px",
+    marginBottom: "20px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "12px",
+    border: "1px solid #ddd",
+  },
+  cardTitle: {
+    marginBottom: "10px",
+    color: "#6c3fc9",
+    fontSize: "18px",
+  },
+  meta: {
+    fontSize: "14px",
+    color: "#333",
+    marginBottom: "10px",
+  },
+  date: {
+    color: "#666",
+    fontSize: "12px",
+  },
+  details: {
+    fontSize: "14px",
+    color: "#444",
+  },
+};

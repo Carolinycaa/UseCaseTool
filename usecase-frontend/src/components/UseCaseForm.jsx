@@ -87,22 +87,11 @@ export default function UseCaseForm({
   const isDisabled = loading || readOnly;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        backgroundColor: "#f9f9f9",
-        border: "1px solid #ddd",
-        padding: 24,
-        borderRadius: 12,
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.05)",
-        marginTop: 20,
-      }}
-    >
-      <h3 style={{ marginBottom: 20 }}>
+    <form onSubmit={handleSubmit} style={styles.form}>
+      <h3 style={styles.title}>
         {useCase ? "Editar Caso de Uso" : "Novo Caso de Uso"}
       </h3>
 
-      {/* Campos dinâmicos */}
       {[
         { label: "Título", name: "title" },
         { label: "Descrição", name: "description", multiline: true },
@@ -117,11 +106,10 @@ export default function UseCaseForm({
         },
         { label: "Exceções", name: "exceptions", multiline: true },
       ].map(({ label, name, multiline }) => (
-        <div key={name} style={{ marginBottom: 16 }}>
-          <label htmlFor={name}>
-            <strong>{label}:</strong>
+        <div key={name} style={styles.inputGroup}>
+          <label htmlFor={name} style={styles.label}>
+            {label}:
           </label>
-          <br />
           {multiline ? (
             <textarea
               id={name}
@@ -130,12 +118,7 @@ export default function UseCaseForm({
               onChange={handleChange}
               disabled={isDisabled}
               rows={4}
-              style={{
-                width: "100%",
-                padding: 8,
-                borderRadius: 6,
-                border: "1px solid #ccc",
-              }}
+              style={styles.input}
             />
           ) : (
             <input
@@ -145,34 +128,23 @@ export default function UseCaseForm({
               value={formData[name]}
               onChange={handleChange}
               disabled={isDisabled}
-              style={{
-                width: "100%",
-                padding: 8,
-                borderRadius: 6,
-                border: "1px solid #ccc",
-              }}
+              style={styles.input}
             />
           )}
         </div>
       ))}
 
-      {/* Mensagem de erro */}
-      {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+      {error && <p style={styles.error}>{error}</p>}
 
-      {/* Botões */}
       {!readOnly && (
-        <div style={{ marginTop: 20 }}>
+        <div style={styles.buttonGroup}>
           <button
             type="submit"
             disabled={loading}
             style={{
-              backgroundColor: "#007bff",
-              color: "#fff",
-              padding: "10px 16px",
-              border: "none",
-              borderRadius: 6,
+              ...styles.button,
+              backgroundColor: "#6c3fc9",
               cursor: loading ? "not-allowed" : "pointer",
-              fontWeight: "bold",
             }}
           >
             {loading ? "Salvando..." : "Salvar"}
@@ -182,14 +154,10 @@ export default function UseCaseForm({
             onClick={onCancel}
             disabled={loading}
             style={{
-              marginLeft: 10,
+              ...styles.button,
               backgroundColor: "#6c757d",
-              color: "#fff",
-              padding: "10px 16px",
-              border: "none",
-              borderRadius: 6,
+              marginLeft: "10px",
               cursor: loading ? "not-allowed" : "pointer",
-              fontWeight: "bold",
             }}
           >
             Cancelar
@@ -199,3 +167,58 @@ export default function UseCaseForm({
     </form>
   );
 }
+
+const styles = {
+  form: {
+    backgroundColor: "#ffffff",
+    borderRadius: "16px",
+    padding: "30px",
+    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  title: {
+    fontSize: "20px",
+    marginBottom: "20px",
+    color: "#6c3fc9",
+  },
+  inputGroup: {
+    marginBottom: "16px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "6px",
+    fontWeight: "600",
+    color: "#555",
+    fontSize: "14px",
+  },
+  input: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    outline: "none",
+    boxSizing: "border-box",
+  },
+  error: {
+    color: "#d9534f",
+    marginTop: "10px",
+    fontWeight: "600",
+    fontSize: "14px",
+    textAlign: "center",
+  },
+  buttonGroup: {
+    marginTop: "20px",
+    display: "flex",
+    justifyContent: "flex-start",
+  },
+  button: {
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "10px",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "15px",
+    transition: "background-color 0.3s",
+  },
+};

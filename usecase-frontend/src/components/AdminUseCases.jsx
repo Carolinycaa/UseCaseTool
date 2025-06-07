@@ -15,6 +15,7 @@ export default function AdminUseCases() {
   const [showForm, setShowForm] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = localStorage.getItem("token");
   const role = token ? jwtDecode(token).role : null;
@@ -104,12 +105,19 @@ export default function AdminUseCases() {
 
       {role === "admin" && !showForm && (
         <div style={styles.actionBar}>
-          <div></div>
           <button onClick={() => setShowForm(true)} style={styles.createBtn}>
             + Novo Caso de Uso
           </button>
         </div>
       )}
+
+      <input
+        type="text"
+        placeholder="Buscar por título ou autor..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={styles.searchInput}
+      />
 
       {showForm && (
         <UseCaseForm
@@ -135,45 +143,45 @@ export default function AdminUseCases() {
             </tr>
           </thead>
           <tbody>
-            {useCases.map((uc) => (
-              <tr key={uc.id} style={styles.tr}>
-                <td style={styles.td}>
-                  <Link
-                    to={`/use-cases/${uc.id}`}
-                    style={{
-                      color: "#007bff",
-                      fontWeight: "bold",
-                      textDecoration: "none",
-                    }}
-                  >
-                    {uc.title}
-                  </Link>
-                </td>
-
-                <td style={styles.td}>{uc.description}</td>
-                <td style={styles.td}>{uc.creator?.username || "N/A"}</td>
-                <td style={styles.td}>
-                  <button
-                    onClick={() => handleEdit(uc.id)}
-                    style={styles.actionBtn}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(uc.id)}
-                    style={{ ...styles.actionBtn, color: "#dc3545" }}
-                  >
-                    Excluir
-                  </button>
-                  <button
-                    onClick={() => handleViewHistory(uc.id)}
-                    style={{ ...styles.actionBtn, color: "#17a2b8" }}
-                  >
-                    Histórico
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {useCases
+              .filter(
+                (uc) =>
+                  uc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  uc.creator?.username
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+              )
+              .map((uc) => (
+                <tr key={uc.id} style={styles.tr}>
+                  <td style={styles.td}>
+                    <Link to={`/use-cases/${uc.id}`} style={styles.link}>
+                      {uc.title}
+                    </Link>
+                  </td>
+                  <td style={styles.td}>{uc.description}</td>
+                  <td style={styles.td}>{uc.creator?.username || "N/A"}</td>
+                  <td style={styles.td}>
+                    <button
+                      onClick={() => handleEdit(uc.id)}
+                      style={styles.actionBtn}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(uc.id)}
+                      style={{ ...styles.actionBtn, color: "#dc3545" }}
+                    >
+                      Excluir
+                    </button>
+                    <button
+                      onClick={() => handleViewHistory(uc.id)}
+                      style={{ ...styles.actionBtn, color: "#17a2b8" }}
+                    >
+                      Histórico
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}
@@ -191,38 +199,47 @@ export default function AdminUseCases() {
   );
 }
 
-// 🎨 Estilos
+// 🎨 Estilos harmonizados
 const styles = {
   container: {
     maxWidth: "1000px",
     margin: "50px auto",
     padding: "30px",
     background: "#fff",
-    borderRadius: "12px",
-    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    borderRadius: "16px",
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+    fontFamily: "'Poppins', sans-serif",
   },
   heading: {
     textAlign: "center",
-    marginBottom: "20px",
-    color: "#007bff",
+    marginBottom: "24px",
+    color: "#6c3fc9",
+    fontSize: "24px",
   },
   backLink: {
     display: "inline-block",
     marginBottom: "20px",
-    color: "#007bff",
+    color: "#6c3fc9",
     textDecoration: "none",
     fontWeight: "500",
   },
   createBtn: {
-    marginBottom: "20px",
     padding: "10px 20px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#6c3fc9",
     color: "#fff",
     fontWeight: "600",
     border: "none",
     borderRadius: "8px",
     cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "10px",
+    marginBottom: "20px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
   },
   errorMsg: {
     color: "red",
@@ -236,24 +253,31 @@ const styles = {
   },
   th: {
     textAlign: "left",
-    padding: "12px 8px",
+    padding: "12px 10px",
     fontWeight: "bold",
     borderBottom: "2px solid #ddd",
-    backgroundColor: "#f0f8ff",
+    backgroundColor: "#f4f2fb",
+    color: "#555",
   },
   tr: {
     borderBottom: "1px solid #eee",
   },
   td: {
-    padding: "10px 8px",
+    padding: "12px 10px",
+    color: "#333",
   },
   actionBtn: {
     background: "none",
     border: "none",
-    color: "#007bff",
+    color: "#6c3fc9",
     cursor: "pointer",
     marginRight: "10px",
     fontWeight: "500",
+  },
+  link: {
+    color: "#6c3fc9",
+    fontWeight: "bold",
+    textDecoration: "none",
   },
   actionBar: {
     display: "flex",

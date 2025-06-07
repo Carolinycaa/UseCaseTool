@@ -64,144 +64,174 @@ export default function Register() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "50px auto",
-        padding: "30px 25px",
-        borderRadius: "12px",
-        boxShadow: "0 4px 15px rgba(0,0,0,0.15)",
-        backgroundColor: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "25px", color: "#222" }}>
-        Registrar
-      </h2>
-      <form onSubmit={handleSubmit} noValidate>
-        <div>
-          <label htmlFor="username" style={labelStyle}>
-            Nome de usuário
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Digite seu nome de usuário"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Registrar</h2>
+        <form onSubmit={handleSubmit} noValidate>
+          <div>
+            <label htmlFor="username" style={styles.label}>
+              Nome de usuário
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Digite seu nome de usuário"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="email" style={labelStyle}>
-            E-mail
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Digite seu e-mail"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+          <div>
+            <label htmlFor="email" style={styles.label}>
+              E-mail
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Digite seu e-mail"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="password" style={labelStyle}>
-            Senha
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Digite sua senha"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+          <div>
+            <label htmlFor="password" style={styles.label}>
+              Senha
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Digite sua senha"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="confirmPassword" style={labelStyle}>
-            Confirmar senha
-          </label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirme sua senha"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            style={inputStyle}
-          />
-        </div>
+          <div>
+            <label htmlFor="confirmPassword" style={styles.label}>
+              Confirmar senha
+            </label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirme sua senha"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        {message && (
-          <p
+          {message && (
+            <p
+              style={{
+                color: message.toLowerCase().includes("sucesso")
+                  ? "green"
+                  : "#d9534f",
+                marginBottom: "15px",
+                fontWeight: "600",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
+            >
+              {message}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={!isFormValid || loading}
             style={{
-              color: message.toLowerCase().includes("sucesso")
-                ? "green"
-                : "red",
-              marginBottom: "15px",
-              fontWeight: "600",
-              textAlign: "center",
+              ...styles.button,
+              backgroundColor: !isFormValid || loading ? "#b9a5df" : "#6c3fc9",
+              cursor: !isFormValid || loading ? "not-allowed" : "pointer",
             }}
           >
-            {message}
-          </p>
-        )}
+            {loading ? "Registrando..." : "Registrar"}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={!isFormValid || loading}
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "10px",
-            border: "none",
-            backgroundColor: !isFormValid || loading ? "#a0a0a0" : "#007bff",
-            color: "#fff",
-            fontWeight: "700",
-            cursor: !isFormValid || loading ? "not-allowed" : "pointer",
-            fontSize: "16px",
-            transition: "background-color 0.3s",
-          }}
-        >
-          {loading ? "Registrando..." : "Registrar"}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 20, textAlign: "center", color: "#555" }}>
-        Já tem uma conta?{" "}
-        <Link to="/" style={{ color: "#007bff", textDecoration: "none" }}>
-          Faça login
-        </Link>
-      </p>
+        <p style={styles.footerText}>
+          Já tem uma conta?{" "}
+          <Link to="/" style={styles.link}>
+            Faça login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
 
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontWeight: "600",
-  color: "#555",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: "8px",
-  border: "1px solid #ccc",
-  marginBottom: "20px",
-  fontSize: "14px",
-  outline: "none",
-  transition: "border-color 0.3s",
+const styles = {
+  container: {
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: "40px 30px",
+    borderRadius: "16px",
+    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    maxWidth: "420px",
+    width: "100%",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "25px",
+    color: "#6c3fc9",
+    fontSize: "24px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    color: "#555",
+    fontSize: "14px",
+  },
+  input: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    outline: "none",
+    marginBottom: "20px",
+    transition: "border-color 0.3s",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "none",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "16px",
+    transition: "background-color 0.3s",
+  },
+  footerText: {
+    marginTop: "20px",
+    textAlign: "center",
+    color: "#555",
+    fontSize: "14px",
+  },
+  link: {
+    color: "#6c3fc9",
+    textDecoration: "none",
+    fontWeight: "600",
+  },
 };

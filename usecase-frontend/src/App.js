@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
@@ -15,19 +15,19 @@ import UserManagement from "./components/Usermanagement";
 import AdminUseCases from "./components/AdminUseCases";
 import EditUseCasePage from "./pages/EditUseCasePage";
 import UseCaseDetails from "./pages/UseCaseDetails";
+import WelcomePage from "./pages/WelcomePage";
 
 export default function App() {
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/activate" element={<Activate />} />
         <Route path="/use-cases/edit/:id" element={<EditUseCasePage />} />
-
-        {/* ✅ Esta rota precisa vir antes de /use-cases */}
+        <Route path="/" element={<WelcomePage />} />
         <Route
           path="/use-cases/:id"
           element={
@@ -36,7 +36,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/use-cases"
           element={
@@ -45,7 +44,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/dashboard"
           element={
@@ -54,7 +52,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/admin"
           element={
@@ -63,7 +60,6 @@ export default function App() {
             </AdminRoute>
           }
         />
-
         <Route
           path="/admin/users"
           element={
@@ -72,7 +68,6 @@ export default function App() {
             </AdminRoute>
           }
         />
-
         <Route
           path="/admin/usecases"
           element={
@@ -81,7 +76,6 @@ export default function App() {
             </AdminRoute>
           }
         />
-
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </>

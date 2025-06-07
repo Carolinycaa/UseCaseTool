@@ -9,7 +9,6 @@ export default function UserManagement() {
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
 
-  // Buscar usuários
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -32,7 +31,6 @@ export default function UserManagement() {
     fetchUsers();
   }, [token]);
 
-  // Alterar papel do usuário
   const changeRole = async (userId, newRole) => {
     if (changingRoleUserId !== null) return;
 
@@ -53,7 +51,6 @@ export default function UserManagement() {
       if (!res.ok)
         throw new Error(data.message || "Erro ao atualizar o papel do usuário");
 
-      // Atualizar estado local
       setUsers((prev) =>
         prev.map((user) =>
           user.id === userId ? { ...user, role: newRole } : user
@@ -70,16 +67,15 @@ export default function UserManagement() {
     <div style={styles.container}>
       <h2 style={styles.heading}>Gerenciamento de Usuários</h2>
 
-      {/* Botão Voltar */}
       <div style={{ marginBottom: "20px", textAlign: "left" }}>
         <button
           onClick={() => (window.location.href = "/admin")}
           style={styles.backButton}
           onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = "#0056b3")
+            (e.currentTarget.style.backgroundColor = "#5a2db3")
           }
           onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = "#007bff")
+            (e.currentTarget.style.backgroundColor = "#6c3fc9")
           }
         >
           ← Voltar ao Painel Administrativo
@@ -94,7 +90,7 @@ export default function UserManagement() {
       )}
 
       <table style={styles.table}>
-        <thead style={{ backgroundColor: "#f0f8ff" }}>
+        <thead style={{ backgroundColor: "#f4f2fb" }}>
           <tr>
             <th style={styles.th}>Usuário</th>
             <th style={styles.th}>Email</th>
@@ -108,8 +104,7 @@ export default function UserManagement() {
               key={id}
               style={{
                 borderBottom: "1px solid #eee",
-                backgroundColor:
-                  id === changingRoleUserId ? "#f9f9f9" : "white",
+                backgroundColor: id === changingRoleUserId ? "#f9f9f9" : "#fff",
               }}
             >
               <td style={styles.td}>{username}</td>
@@ -146,28 +141,28 @@ export default function UserManagement() {
   );
 }
 
-// 🎨 Estilos
 const styles = {
   container: {
     maxWidth: "900px",
     margin: "50px auto",
     padding: "30px",
     background: "#fff",
-    borderRadius: "12px",
-    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    borderRadius: "16px",
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+    fontFamily: "'Poppins', sans-serif",
   },
   heading: {
     textAlign: "center",
     marginBottom: 30,
-    color: "#007bff",
+    color: "#6c3fc9",
+    fontSize: "24px",
   },
   backButton: {
     padding: "10px 18px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6c3fc9",
     color: "#fff",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "10px",
     fontWeight: "600",
     cursor: "pointer",
     transition: "background-color 0.3s",
@@ -179,32 +174,36 @@ const styles = {
   },
   th: {
     textAlign: "left",
-    padding: "12px 8px",
+    padding: "12px 10px",
     fontWeight: "bold",
     borderBottom: "2px solid #ddd",
+    color: "#555",
   },
   td: {
-    padding: "10px 8px",
+    padding: "10px 10px",
+    color: "#333",
+    fontSize: "14px",
   },
   badge: {
-    padding: "4px 8px",
+    padding: "6px 10px",
     borderRadius: "8px",
     fontSize: "13px",
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#fff",
     textTransform: "capitalize",
+    display: "inline-block",
   },
   select: (disabled) => ({
-    padding: "6px 10px",
-    borderRadius: "6px",
+    padding: "8px 12px",
+    borderRadius: "8px",
     border: "1px solid #ccc",
     cursor: disabled ? "not-allowed" : "pointer",
+    fontSize: "14px",
   }),
 };
 
-// 🎨 Cores dos papéis
 const roleColors = {
-  admin: "#007bff",
+  admin: "#6c3fc9",
   editor: "#28a745",
   visualizador: "#6c757d",
 };
