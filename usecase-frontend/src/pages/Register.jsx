@@ -67,7 +67,7 @@ export default function Register() {
     <div style={styles.container}>
       <div style={styles.card}>
         <h2 style={styles.title}>Registrar</h2>
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit} noValidate data-testid="register-form">
           <div>
             <label htmlFor="username" style={styles.label}>
               Nome de usuário
@@ -153,7 +153,7 @@ export default function Register() {
             disabled={!isFormValid || loading}
             style={{
               ...styles.button,
-              backgroundColor: !isFormValid || loading ? "#b9a5df" : "#6c3fc9",
+              backgroundColor: !isFormValid || loading ? "#9cd1c9" : "#1abc9c",
               cursor: !isFormValid || loading ? "not-allowed" : "pointer",
             }}
           >
@@ -175,42 +175,44 @@ export default function Register() {
 const styles = {
   container: {
     minHeight: "100vh",
-    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    background: "linear-gradient(to right, #1abc9c, #16a085)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    padding: "1rem",
   },
   card: {
     backgroundColor: "#ffffff",
-    padding: "40px 30px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    padding: "3rem 2.5rem",
+    borderRadius: "20px",
+    boxShadow: "0 12px 32px rgba(0, 0, 0, 0.2)",
     maxWidth: "420px",
     width: "100%",
   },
   title: {
     textAlign: "center",
-    marginBottom: "25px",
-    color: "#6c3fc9",
-    fontSize: "24px",
+    marginBottom: "30px",
+    color: "#1abc9c",
+    fontSize: "28px",
+    fontWeight: "700",
   },
   label: {
     display: "block",
-    marginBottom: "8px",
+    marginBottom: "6px",
     fontWeight: "600",
-    color: "#555",
+    color: "#333",
     fontSize: "14px",
   },
   input: {
     width: "100%",
-    padding: "10px 12px",
+    padding: "12px 14px",
     borderRadius: "10px",
     border: "1px solid #ccc",
     fontSize: "15px",
     outline: "none",
     marginBottom: "20px",
-    transition: "border-color 0.3s",
+    transition: "border-color 0.3s, box-shadow 0.3s",
     boxSizing: "border-box",
   },
   button: {
@@ -221,16 +223,16 @@ const styles = {
     color: "#fff",
     fontWeight: "600",
     fontSize: "16px",
-    transition: "background-color 0.3s",
+    transition: "background-color 0.3s, transform 0.2s",
   },
   footerText: {
-    marginTop: "20px",
+    marginTop: "25px",
     textAlign: "center",
     color: "#555",
     fontSize: "14px",
   },
   link: {
-    color: "#6c3fc9",
+    color: "#1abc9c",
     textDecoration: "none",
     fontWeight: "600",
   },

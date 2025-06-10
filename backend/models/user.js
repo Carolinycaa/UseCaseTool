@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const User = sequelize.define(
-  "users", // nome da tabela (conferir com seu banco)
+  "users", 
   {
     username: {
       type: DataTypes.STRING,

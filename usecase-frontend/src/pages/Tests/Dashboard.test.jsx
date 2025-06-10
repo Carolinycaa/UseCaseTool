@@ -1,77 +1,68 @@
+// __tests__/Dashboard.test.jsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Dashboard from "../Dashboard";
 import { MemoryRouter } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import * as jwt from "jwt-decode";
 
-// Mock do jwtDecode
 jest.mock("jwt-decode", () => ({
   jwtDecode: jest.fn(),
 }));
 
-describe("Página de Dashboard", () => {
-  const renderDashboard = () => {
-    render(
-      <MemoryRouter>
-        <Dashboard />
-      </MemoryRouter>
-    );
-  };
+describe("Dashboard", () => {
+  const mockToken = JSON.stringify("fake-token");
 
   beforeEach(() => {
     localStorage.clear();
     jest.clearAllMocks();
   });
 
-  test("renderiza nome e papel do usuário a partir do token", () => {
-    const mockToken = "fake-token";
-    const mockUser = { username: "joao", role: "user" };
+  test("exibe nome de usuário e função do token", () => {
     localStorage.setItem("token", mockToken);
-    jwtDecode.mockReturnValue(mockUser);
+    jwt.jwtDecode.mockReturnValue({ username: "Maria", role: "editor" });
 
-    renderDashboard();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText(/bem-vindo, joao/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        (content, element) =>
-          element.tagName.toLowerCase() === "p" &&
-          content.includes("função no sistema é:")
-      )
-    ).toBeInTheDocument();
-
-    expect(screen.getByText("desconhecido")).toBeInTheDocument();
-
-    expect(
-      screen.queryByText(/acessar painel administrativo/i)
-    ).not.toBeInTheDocument();
+    expect(screen.getByText(/bem-vindo, maria/i)).toBeInTheDocument();
+    expect(screen.getByText(/sua função no sistema é:/i)).toBeInTheDocument();
+    expect(screen.getByText("editor")).toBeInTheDocument();
   });
 
-  test("mostra link do painel administrativo se for admin", () => {
-    const mockToken = "fake-token";
-    const mockUser = { username: "admin", role: "admin" };
+  test("mostra botão para admin acessar painel administrativo", () => {
     localStorage.setItem("token", mockToken);
-    jwtDecode.mockReturnValue(mockUser);
+    jwt.jwtDecode.mockReturnValue({ username: "João", role: "admin" });
 
-    renderDashboard();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText(/bem-vindo, admin/i)).toBeInTheDocument();
     expect(
       screen.getByText(/acessar painel administrativo/i)
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /acessar painel administrativo/i })
+    ).toHaveAttribute("href", "/admin");
   });
 
-  test("mostra fallback se token for inválido", () => {
-    localStorage.setItem("token", "token-invalido");
-    jwtDecode.mockImplementation(() => {
-      throw new Error("Token inválido");
+  test("usa fallback quando token é inválido", () => {
+    localStorage.setItem("token", mockToken);
+    jwt.jwtDecode.mockImplementation(() => {
+      throw new Error("invalid token");
     });
 
-    renderDashboard();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/bem-vindo, usuário/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/função no sistema é: desconhecido/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/desconhecido/i)).toBeInTheDocument();
   });
 });

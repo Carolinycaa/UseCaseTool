@@ -9,5 +9,6 @@ test("renderiza o componente App", () => {
     </BrowserRouter>
   );
 
-  expect(screen.getByText(/login/i)).toBeInTheDocument();
+  const loginElements = screen.getAllByText(/login/i);
+  expect(loginElements.length).toBeGreaterThanOrEqual(1);
 });

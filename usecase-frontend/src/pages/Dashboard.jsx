@@ -21,56 +21,67 @@ export default function Dashboard() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>👋 Bem-vindo, {userInfo.username}!</h2>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Bem-vindo, {userInfo.username}!</h2>
 
-      <p style={styles.roleText}>
-        Sua função no sistema é:{" "}
-        <strong style={styles.roleHighlight}>{userInfo.role}</strong>.
-      </p>
+        <p style={styles.roleText}>
+          Sua função no sistema é:{" "}
+          <strong style={styles.roleHighlight}>{userInfo.role}</strong>.
+        </p>
 
-      {userInfo.role === "admin" && (
-        <div style={{ marginTop: "30px" }}>
-          <Link
-            to="/admin"
-            style={styles.button}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#5a2ebc")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#6c3fc9")
-            }
-          >
-            <FaUserShield style={{ marginRight: "10px" }} />
-            Acessar Painel Administrativo
-          </Link>
-        </div>
-      )}
+        {userInfo.role === "admin" && (
+          <div style={{ marginTop: "30px" }}>
+            <Link
+              to="/admin"
+              style={styles.button}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#5a2ebc")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#6c3fc9")
+              }
+            >
+              <FaUserShield style={{ marginRight: "10px" }} />
+              Acessar Painel Administrativo
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 const styles = {
   container: {
-    maxWidth: "600px",
-    margin: "60px auto",
-    padding: "40px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
-    backgroundColor: "#ffffff",
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #a18cd1, #fbc2eb)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    padding: "2rem",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: "3rem",
+    borderRadius: "24px",
+    boxShadow: "0 10px 28px rgba(0, 0, 0, 0.15)",
+    maxWidth: "600px",
+    width: "100%",
     textAlign: "center",
   },
   title: {
     color: "#6c3fc9",
-    marginBottom: "12px",
-    fontSize: "24px",
+    marginBottom: "1rem",
+    fontSize: "30px",
+    fontWeight: "700",
   },
   roleText: {
-    fontSize: "16px",
+    fontSize: "17px",
     color: "#555",
   },
   roleHighlight: {
-    color: "#333",
+    color: "#222",
     fontWeight: "600",
   },
   button: {

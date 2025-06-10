@@ -81,7 +81,7 @@ export default function Login() {
             type="submit"
             style={{
               ...styles.button,
-              backgroundColor: loading ? "#b9a5df" : "#6c3fc9",
+              backgroundColor: loading ? "#a988d8" : "#6c3fc9",
               cursor: loading ? "not-allowed" : "pointer",
             }}
           >
@@ -103,44 +103,46 @@ export default function Login() {
 const styles = {
   container: {
     minHeight: "100vh",
-    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    background: "linear-gradient(to right, #6a11cb, #2575fc)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    padding: "1rem",
   },
   card: {
     backgroundColor: "#ffffff",
-    padding: "40px 30px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    padding: "3rem 2.5rem",
+    borderRadius: "20px",
+    boxShadow: "0 12px 32px rgba(0, 0, 0, 0.2)",
     maxWidth: "420px",
     width: "100%",
   },
   title: {
     textAlign: "center",
-    marginBottom: "25px",
+    marginBottom: "30px",
     color: "#6c3fc9",
-    fontSize: "24px",
+    fontSize: "28px",
+    fontWeight: "700",
   },
   inputGroup: {
     marginBottom: "20px",
   },
   label: {
     display: "block",
-    marginBottom: "8px",
+    marginBottom: "6px",
     fontWeight: "600",
-    color: "#555",
+    color: "#444",
     fontSize: "14px",
   },
   input: {
     width: "100%",
-    padding: "10px 12px",
+    padding: "12px 14px",
     borderRadius: "10px",
     border: "1px solid #ccc",
     fontSize: "15px",
     outline: "none",
-    transition: "border-color 0.3s",
+    transition: "border-color 0.3s, box-shadow 0.3s",
     boxSizing: "border-box",
   },
   button: {
@@ -151,7 +153,7 @@ const styles = {
     color: "#fff",
     fontWeight: "600",
     fontSize: "16px",
-    transition: "background-color 0.3s",
+    transition: "background-color 0.3s, transform 0.2s",
   },
   errorMsg: {
     color: "#d9534f",
@@ -161,9 +163,9 @@ const styles = {
     fontSize: "14px",
   },
   footerText: {
-    marginTop: "20px",
+    marginTop: "25px",
     textAlign: "center",
-    color: "#555",
+    color: "#444",
     fontSize: "14px",
   },
   link: {

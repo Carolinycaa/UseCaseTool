@@ -16,6 +16,7 @@ import AdminUseCases from "./components/AdminUseCases";
 import EditUseCasePage from "./pages/EditUseCasePage";
 import UseCaseDetails from "./pages/UseCaseDetails";
 import WelcomePage from "./pages/WelcomePage";
+import CreateUseCasePage from "./components/CreateUseCasePage";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/activate" element={<Activate />} />
         <Route path="/use-cases/edit/:id" element={<EditUseCasePage />} />
         <Route path="/" element={<WelcomePage />} />
+        <Route path="/use-cases/create" element={<CreateUseCasePage />} />
         <Route
           path="/use-cases/:id"
           element={

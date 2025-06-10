@@ -41,6 +41,7 @@ export default function UseCaseHistoryModal({ useCaseId, onClose }) {
   return (
     <div
       id="modal-backdrop"
+      data-testid="modal-backdrop"
       onClick={handleBackdropClick}
       style={styles.backdrop}
     >
@@ -136,6 +137,7 @@ const styles = {
     alignItems: "center",
     zIndex: 1000,
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    padding: "20px",
   },
   modal: {
     background: "#ffffff",
@@ -145,7 +147,7 @@ const styles = {
     maxHeight: "90vh",
     overflowY: "auto",
     position: "relative",
-    borderRadius: "16px",
+    borderRadius: "20px",
     boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
   },
   closeButton: {
@@ -154,7 +156,7 @@ const styles = {
     right: 16,
     background: "transparent",
     border: "none",
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#6c3fc9",
     cursor: "pointer",
@@ -163,6 +165,7 @@ const styles = {
     fontSize: "22px",
     marginBottom: "24px",
     color: "#6c3fc9",
+    textAlign: "center",
   },
   loading: {
     textAlign: "center",
@@ -186,9 +189,10 @@ const styles = {
   card: {
     padding: "20px",
     marginBottom: "20px",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "12px",
-    border: "1px solid #ddd",
+    backgroundColor: "#fdfbff",
+    borderRadius: "14px",
+    border: "1px solid #eee",
+    boxShadow: "0 6px 16px rgba(0,0,0,0.05)",
   },
   cardTitle: {
     marginBottom: "10px",
@@ -207,5 +211,6 @@ const styles = {
   details: {
     fontSize: "14px",
     color: "#444",
+    lineHeight: "1.6",
   },
 };

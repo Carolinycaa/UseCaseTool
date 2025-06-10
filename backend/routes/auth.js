@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 
 const User = require("../models/user");
 const UserActivation = require("../models/userActivation");
+
 const authenticateToken = require("../middleware/authMiddleware");
 const checkRole = require("../middleware/checkRole");
 
@@ -26,12 +27,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 🔑 Geração de código de ativação
+// Geração de código de ativação
 const generateActivationCode = () => {
   return crypto.randomBytes(3).toString("hex").slice(0, 5);
 };
 
-// 📤 Envio de e-mail de ativação
+// Envio de e-mail de ativação
 const sendActivationEmail = (email, activationCode) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -55,7 +56,7 @@ const sendActivationEmail = (email, activationCode) => {
   });
 };
 
-// ✅ REGISTRO
+// REGISTRO
 router.post(
   "/register",
   [

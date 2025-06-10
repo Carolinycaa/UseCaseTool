@@ -62,33 +62,44 @@ export default function EditUseCasePage() {
   if (error) return <p style={styles.errorText}>Erro: {error}</p>;
 
   return (
-    <div style={styles.container}>
-      <UseCaseForm
-        useCase={useCase}
-        onSave={handleSave}
-        onCancel={handleCancel}
-      />
+    <div style={styles.wrapper}>
+      <div style={styles.container}>
+        <UseCaseForm
+          useCase={useCase}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      </div>
     </div>
   );
 }
 
+// 🎨 Estilos harmonizados
 const styles = {
-  container: {
-    maxWidth: "720px",
-    margin: "40px auto",
-    padding: "0 20px",
+  wrapper: {
+    backgroundColor: "#f6f1fc",
+    minHeight: "100vh",
+    padding: "50px 20px",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+  },
+  container: {
+    maxWidth: "800px",
+    margin: "0 auto",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    padding: "30px",
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
   },
   loadingText: {
     textAlign: "center",
-    marginTop: "80px",
+    marginTop: "100px",
     fontSize: "18px",
     color: "#6c3fc9",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
   },
   errorText: {
     textAlign: "center",
-    marginTop: "80px",
+    marginTop: "100px",
     fontSize: "16px",
     color: "#d9534f",
     fontWeight: "600",

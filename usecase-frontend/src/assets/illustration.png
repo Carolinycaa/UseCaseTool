@@ -1,0 +1,12 @@
+import exampleImage from "../assets/illustration.png";
+
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+
+const exampleImage = "https://cdn-icons-png.flaticon.com/512/1006/1006771.png";
+
+export default function WelcomePage() {
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
+

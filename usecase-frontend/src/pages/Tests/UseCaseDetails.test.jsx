@@ -1,95 +1,106 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import UseCaseDetails from "../UseCaseDetails";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // ✅ IMPORTAÇÃO NOMEADA
 
-// Mocks
+// ✅ Mockando a função nomeada
 jest.mock("jwt-decode", () => ({
-  jwtDecode: () => ({ role: "admin", id: 1 }),
+  jwtDecode: jest.fn(),
 }));
 
+const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => {
   const actual = jest.requireActual("react-router-dom");
   return {
     ...actual,
+    useNavigate: () => mockNavigate,
     useParams: () => ({ id: "123" }),
-    useNavigate: () => jest.fn(),
+    Link: ({ to, children }) => <a href={to}>{children}</a>,
   };
 });
 
-// Simula token no localStorage
-beforeEach(() => {
-  localStorage.setItem("token", "fake-token");
-});
-
-afterEach(() => {
-  localStorage.clear();
-  jest.clearAllMocks();
-});
-
 describe("UseCaseDetails", () => {
-  test("mostra mensagem de carregando", () => {
-    jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
+  const mockUseCase = {
+    id: "123",
+    title: "Cadastro de Usuário",
+    description: "Permite cadastrar novos usuários.",
+    actor: "Administrador",
+    preconditions: "Estar logado",
+    postconditions: "Usuário cadastrado com sucesso",
+    main_flow: "Preencher formulário e enviar",
+    alternative_flows: "Voltar para edição",
+    exceptions: "Erro de conexão",
+    created_by: 1,
+  };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+    localStorage.setItem("token", "fake-token");
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockUseCase,
+    });
+
+    jwtDecode.mockReturnValue({ role: "admin", id: 1 }); // ✅ Funciona agora
+  });
+
+  it("renderiza os detalhes do caso de uso corretamente", async () => {
     render(
-      <MemoryRouter initialEntries={["/use-cases/123"]}>
-        <Routes>
-          <Route path="/use-cases/:id" element={<UseCaseDetails />} />
-        </Routes>
+      <MemoryRouter>
+        <UseCaseDetails />
       </MemoryRouter>
     );
 
     expect(screen.getByText(/carregando detalhes/i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText("Cadastro de Usuário")).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/administrador/i)).toBeInTheDocument();
+    expect(screen.getByText(/editar caso de uso/i)).toBeInTheDocument();
   });
 
-  test("mostra mensagem de erro em caso de falha na requisição", async () => {
-    jest.spyOn(global, "fetch").mockRejectedValue(new Error("Erro ao buscar"));
-
+  it("navega para a tela de edição ao clicar em editar", async () => {
     render(
-      <MemoryRouter initialEntries={["/use-cases/123"]}>
-        <Routes>
-          <Route path="/use-cases/:id" element={<UseCaseDetails />} />
-        </Routes>
+      <MemoryRouter>
+        <UseCaseDetails />
       </MemoryRouter>
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/erro: erro ao buscar/i)).toBeInTheDocument();
+      expect(screen.getByText(/editar caso de uso/i)).toBeInTheDocument();
     });
+
+    fireEvent.click(screen.getByText(/editar caso de uso/i));
+    expect(mockNavigate).toHaveBeenCalledWith("/use-cases/edit/123");
   });
 
-  test("renderiza os detalhes corretamente", async () => {
-    const fakeData = {
-      id: 123,
-      title: "Cadastrar Produto",
-      description: "Descrição do caso",
-      actor: "Usuário",
-      preconditions: "Estar logado",
-      postconditions: "Produto cadastrado",
-      main_flow: "1. Acessar tela\n2. Preencher dados",
-      alternative_flows: "Fluxo B",
-      exceptions: "Erro de validação",
-      created_by: 1,
-    };
-
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
-      ok: true,
-      json: async () => fakeData,
-    });
+  it("exibe mensagem de erro em caso de falha na requisição", async () => {
+    global.fetch.mockResolvedValueOnce({ ok: false });
 
     render(
-      <MemoryRouter initialEntries={["/use-cases/123"]}>
-        <Routes>
-          <Route path="/use-cases/:id" element={<UseCaseDetails />} />
-        </Routes>
+      <MemoryRouter>
+        <UseCaseDetails />
       </MemoryRouter>
     );
 
-    // Espera até o título do caso de uso aparecer
-    expect(await screen.findByText("Cadastrar Produto")).toBeInTheDocument();
-    expect(screen.getByText(/usuário/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /editar caso de uso/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/erro:/i)).toBeInTheDocument();
+  });
+
+  it("não exibe botão de editar se não tiver permissão", async () => {
+    jwtDecode.mockReturnValue({ role: "visualizador", id: 99 });
+
+    render(
+      <MemoryRouter>
+        <UseCaseDetails />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/editar caso de uso/i)).not.toBeInTheDocument();
+    });
   });
 });

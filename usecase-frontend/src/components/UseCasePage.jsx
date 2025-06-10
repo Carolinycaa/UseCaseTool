@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import UseCaseForm from "./UseCaseForm";
 import UseCaseHistoryModal from "./UseCaseHistoryModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function UseCasePage() {
   const [useCases, setUseCases] = useState([]);
@@ -14,7 +14,9 @@ export default function UseCasePage() {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [selectedHistoryId, setSelectedHistoryId] = useState(null);
   const [role, setRole] = useState(null);
+  const [userId, setUserId] = useState(null);
 
+  const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function UseCasePage() {
     if (token) {
       const decoded = jwtDecode(token);
       setRole(decoded.role);
+      setUserId(decoded.id);
     }
 
     fetchUseCases();
@@ -57,9 +60,8 @@ export default function UseCasePage() {
         },
       });
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error("Erro ao carregar dados completos do caso de uso.");
-      }
 
       const fullData = await response.json();
       setSelectedUseCase(fullData);
@@ -123,197 +125,239 @@ export default function UseCasePage() {
   );
 
   return (
-    <div
-      style={{
-        padding: "30px",
-        fontFamily: "'Poppins', 'Segoe UI', sans-serif",
-        maxWidth: "1000px",
-        margin: "0 auto",
-      }}
-    >
-      <h2 style={{ color: "#6c3fc9", marginBottom: "20px" }}>Casos de Uso</h2>
+    <div style={styles.pageBackground}>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Casos de Uso</h2>
 
-      <input
-        type="text"
-        placeholder="Buscar por título..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          marginBottom: "20px",
-          width: "100%",
-          padding: "10px 12px",
-          borderRadius: "10px",
-          border: "1px solid #ccc",
-          fontSize: "15px",
-        }}
-      />
+        <input
+          type="text"
+          placeholder="Buscar por título..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={styles.searchInput}
+        />
 
-      {(role === "admin" || role === "editor") && (
-        <button
-          onClick={() => {
-            setSelectedUseCase(null);
-            setShowForm(true);
-          }}
-          style={{
-            backgroundColor: "#6c3fc9",
-            color: "#fff",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "8px",
-            fontWeight: "600",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
-        >
-          Novo Caso de Uso
-        </button>
-      )}
+        {(role === "admin" || role === "editor") && (
+          <button
+            onClick={() => navigate("/use-cases/create")}
+            style={styles.newButton}
+          >
+            + Novo Caso de Uso
+          </button>
+        )}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {loading ? (
-        <p>Carregando casos de uso...</p>
-      ) : (
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ backgroundColor: "#f4f4f4" }}>
-                <th style={styles.th}>Título</th>
-                <th style={styles.th}>Descrição</th>
-                <th style={styles.th}>Criado por</th>
-                <th style={styles.th}>Ações</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {filteredUseCases.length === 0 ? (
+        {loading ? (
+          <p>Carregando casos de uso...</p>
+        ) : (
+          <div style={{ overflowX: "auto" }}>
+            <table style={styles.table}>
+              <thead>
                 <tr>
-                  <td
-                    colSpan="4"
-                    style={{ padding: "16px", textAlign: "center" }}
-                  >
-                    Nenhum caso de uso encontrado.
-                  </td>
+                  <th style={styles.th}>Título</th>
+                  <th style={styles.th}>Descrição</th>
+                  <th style={styles.th}>Criado por</th>
+                  <th style={styles.th}>Ações</th>
                 </tr>
-              ) : (
-                filteredUseCases.map((uc) => (
-                  <tr key={uc.id} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={styles.td}>
-                      <Link to={`/use-cases/${uc.id}`} style={styles.link}>
-                        {uc.title}
-                      </Link>
-                    </td>
-                    <td style={styles.td}>{uc.description?.slice(0, 60)}...</td>
-                    <td style={styles.td}>
-                      {uc.creator?.username || "Desconhecido"}
-                    </td>
-                    <td style={styles.td}>
-                      {(role === "admin" ||
-                        (role === "editor" &&
-                          uc.created_by ===
-                            jwtDecode(localStorage.getItem("token")).id)) && (
-                        <>
-                          <button
-                            onClick={() => handleLoadUseCase(uc.id)}
-                            style={styles.btnPrimary}
-                          >
-                            Editar
-                          </button>
-                          <button
-                            onClick={() => handleDelete(uc.id)}
-                            style={styles.btnDanger}
-                          >
-                            Excluir
-                          </button>
-                        </>
-                      )}
-                      {role === "admin" && (
-                        <button
-                          onClick={() => {
-                            setSelectedHistoryId(uc.id);
-                            setShowHistoryModal(true);
-                          }}
-                          style={styles.btnInfo}
-                        >
-                          Ver Histórico
-                        </button>
-                      )}
+              </thead>
+              <tbody>
+                {filteredUseCases.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" style={styles.noResults}>
+                      Nenhum caso de uso encontrado.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      )}
+                ) : (
+                  filteredUseCases.map((uc) => {
+                    const isOwner = uc.created_by?.id === userId;
+                    const canEdit =
+                      role === "admin" || (role === "editor" && isOwner);
 
-      {showForm && (
-        <UseCaseForm
-          useCase={selectedUseCase}
-          onSave={handleSave}
-          onCancel={() => {
-            setShowForm(false);
-            setSelectedUseCase(null);
-          }}
-        />
-      )}
+                    return (
+                      <tr
+                        key={uc.id}
+                        style={{ borderBottom: "1px solid #eee" }}
+                      >
+                        <td style={styles.td}>
+                          <Link to={`/use-cases/${uc.id}`} style={styles.link}>
+                            {uc.title}
+                          </Link>
+                        </td>
+                        <td style={styles.td}>
+                          {uc.description?.slice(0, 60)}...
+                        </td>
+                        <td style={styles.td}>
+                          {uc.creator?.username || "Desconhecido"}
+                        </td>
+                        <td style={styles.td}>
+                          {canEdit && (
+                            <>
+                              <button
+                                onClick={() => handleLoadUseCase(uc.id)}
+                                style={styles.btnPrimary}
+                              >
+                                Editar
+                              </button>
+                              <button
+                                onClick={() => handleDelete(uc.id)}
+                                style={styles.btnDanger}
+                              >
+                                Excluir
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setSelectedHistoryId(uc.id);
+                                  setShowHistoryModal(true);
+                                }}
+                                style={styles.btnInfo}
+                              >
+                                Ver Histórico
+                              </button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-      {showHistoryModal && (
-        <UseCaseHistoryModal
-          useCaseId={selectedHistoryId}
-          onClose={() => {
-            setShowHistoryModal(false);
-            setSelectedHistoryId(null);
-          }}
-        />
-      )}
+        {showForm && (
+          <UseCaseForm
+            useCase={selectedUseCase}
+            onSave={handleSave}
+            onCancel={() => {
+              setShowForm(false);
+              setSelectedUseCase(null);
+            }}
+          />
+        )}
+
+        {showHistoryModal && (
+          <UseCaseHistoryModal
+            useCaseId={selectedHistoryId}
+            onClose={() => {
+              setShowHistoryModal(false);
+              setSelectedHistoryId(null);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
 
 const styles = {
-  th: {
-    padding: "12px",
-    textAlign: "left",
+  pageBackground: {
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #f3e8ff, #fdfbff)",
+    padding: "2rem",
+    fontFamily: "'Poppins', sans-serif",
+  },
+  container: {
+    maxWidth: "1100px",
+    margin: "0 auto",
+    background: "#ffffff",
+    padding: "3rem 2.5rem",
+    borderRadius: "28px",
+    boxShadow: "0 15px 40px rgba(108, 63, 201, 0.1)",
+  },
+  heading: {
+    color: "#6c3fc9",
+    fontSize: "30px",
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: "30px",
+  },
+  searchInput: {
+    marginBottom: "24px",
+    width: "100%",
+    padding: "14px 16px",
+    borderRadius: "12px",
+    border: "1px solid #bbb",
+    fontSize: "16px",
+    background: "#faf8ff",
+  },
+  newButton: {
+    backgroundColor: "#6c3fc9",
+    color: "#fff",
+    padding: "12px 22px",
+    border: "none",
+    borderRadius: "10px",
     fontWeight: "600",
+    cursor: "pointer",
+    marginBottom: "24px",
+    fontSize: "15px",
+    transition: "background-color 0.3s",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: "15px",
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.05)",
+  },
+  th: {
+    padding: "16px",
+    textAlign: "left",
+    fontWeight: "700",
     color: "#555",
+    backgroundColor: "#eae2fa",
+    fontSize: "14px",
     borderBottom: "2px solid #ddd",
   },
   td: {
-    padding: "12px",
+    padding: "14px",
     verticalAlign: "top",
     color: "#333",
-    fontSize: "14px",
+    fontSize: "15px",
+    backgroundColor: "#fff",
   },
   link: {
     color: "#6c3fc9",
     textDecoration: "none",
-    fontWeight: "500",
+    fontWeight: "600",
   },
   btnPrimary: {
     backgroundColor: "#6c3fc9",
     color: "#fff",
     border: "none",
-    padding: "6px 12px",
+    padding: "7px 14px",
     borderRadius: "6px",
     cursor: "pointer",
     marginRight: "6px",
+    fontSize: "14px",
   },
   btnDanger: {
     backgroundColor: "#dc3545",
     color: "#fff",
     border: "none",
-    padding: "6px 12px",
+    padding: "7px 14px",
     borderRadius: "6px",
     cursor: "pointer",
     marginRight: "6px",
+    fontSize: "14px",
   },
   btnInfo: {
     backgroundColor: "#17a2b8",
     color: "#fff",
     border: "none",
-    padding: "6px 12px",
+    padding: "7px 14px",
     borderRadius: "6px",
     cursor: "pointer",
+    fontSize: "14px",
+  },
+  noResults: {
+    padding: "24px",
+    textAlign: "center",
+    color: "#999",
+    fontSize: "16px",
+    background: "#fcf8ff",
+    borderRadius: "10px",
   },
 };

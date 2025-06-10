@@ -64,134 +64,158 @@ export default function UserManagement() {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Gerenciamento de Usuários</h2>
+    <div style={styles.pageBackground}>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Gerenciamento de Usuários</h2>
 
-      <div style={{ marginBottom: "20px", textAlign: "left" }}>
-        <button
-          onClick={() => (window.location.href = "/admin")}
-          style={styles.backButton}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = "#5a2db3")
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = "#6c3fc9")
-          }
-        >
-          ← Voltar ao Painel Administrativo
-        </button>
-      </div>
+        <div style={{ marginBottom: "20px", textAlign: "left" }}>
+          <button
+            onClick={() => (window.location.href = "/admin")}
+            style={styles.backButton}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = "#5a2db3")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = "#6c3fc9")
+            }
+          >
+            ← Voltar ao Painel Administrativo
+          </button>
+        </div>
 
-      {loading && <p style={{ textAlign: "center" }}>Carregando usuários...</p>}
-      {error && (
-        <p style={{ color: "red", textAlign: "center", marginBottom: 15 }}>
-          {error}
-        </p>
-      )}
+        {loading && (
+          <p style={{ textAlign: "center" }}>Carregando usuários...</p>
+        )}
+        {error && (
+          <p style={{ color: "red", textAlign: "center", marginBottom: 15 }}>
+            {error}
+          </p>
+        )}
 
-      <table style={styles.table}>
-        <thead style={{ backgroundColor: "#f4f2fb" }}>
-          <tr>
-            <th style={styles.th}>Usuário</th>
-            <th style={styles.th}>Email</th>
-            <th style={styles.th}>Papel</th>
-            <th style={styles.th}>Alterar Papel</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(({ id, username, email, role }) => (
-            <tr
-              key={id}
-              style={{
-                borderBottom: "1px solid #eee",
-                backgroundColor: id === changingRoleUserId ? "#f9f9f9" : "#fff",
-              }}
-            >
-              <td style={styles.td}>{username}</td>
-              <td style={styles.td}>{email}</td>
-              <td style={styles.td}>
-                <span
-                  style={{ ...styles.badge, backgroundColor: roleColors[role] }}
-                >
-                  {role}
-                </span>
-              </td>
-              <td style={styles.td}>
-                <select
-                  value={role}
-                  onChange={(e) => changeRole(id, e.target.value)}
-                  disabled={changingRoleUserId === id}
-                  style={styles.select(changingRoleUserId === id)}
-                >
-                  <option value="visualizador">Visualizador</option>
-                  <option value="editor">Editor</option>
-                  <option value="admin">Admin</option>
-                </select>
-                {changingRoleUserId === id && (
-                  <span style={{ marginLeft: 10, color: "#888" }}>
-                    Salvando...
-                  </span>
-                )}
-              </td>
+        <table style={styles.table}>
+          <thead>
+            <tr>
+              <th style={styles.th}>Usuário</th>
+              <th style={styles.th}>Email</th>
+              <th style={styles.th}>Papel</th>
+              <th style={styles.th}>Alterar Papel</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map(({ id, username, email, role }) => (
+              <tr
+                key={id}
+                style={{
+                  borderBottom: "1px solid #eee",
+                  backgroundColor:
+                    id === changingRoleUserId ? "#f9f9f9" : "#fff",
+                }}
+              >
+                <td style={styles.td}>{username}</td>
+                <td style={styles.td}>{email}</td>
+                <td style={styles.td}>
+                  <span
+                    style={{
+                      ...styles.badge,
+                      backgroundColor: roleColors[role],
+                    }}
+                  >
+                    {role}
+                  </span>
+                </td>
+                <td style={styles.td}>
+                  <select
+                    value={role}
+                    onChange={(e) => changeRole(id, e.target.value)}
+                    disabled={changingRoleUserId === id}
+                    style={styles.select(changingRoleUserId === id)}
+                  >
+                    <option value="visualizador">Visualizador</option>
+                    <option value="editor">Editor</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                  {changingRoleUserId === id && (
+                    <span style={{ marginLeft: 10, color: "#888" }}>
+                      Salvando...
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
-    maxWidth: "900px",
-    margin: "50px auto",
-    padding: "30px",
-    background: "#fff",
-    borderRadius: "16px",
-    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+  pageBackground: {
+    minHeight: "100vh",
+    background: "linear-gradient(to right, #f7f3ff, #ffffff)",
+    padding: "2rem",
     fontFamily: "'Poppins', sans-serif",
+  },
+  container: {
+    maxWidth: "1000px",
+    margin: "0 auto",
+    padding: "3rem",
+    background: "#fff",
+    borderRadius: "24px",
+    boxShadow: "0 12px 28px rgba(0, 0, 0, 0.08)",
   },
   heading: {
     textAlign: "center",
     marginBottom: 30,
     color: "#6c3fc9",
-    fontSize: "24px",
+    fontSize: "28px",
+    fontWeight: "700",
   },
   backButton: {
-    padding: "10px 18px",
+    padding: "10px 20px",
     backgroundColor: "#6c3fc9",
     color: "#fff",
     border: "none",
     borderRadius: "10px",
     fontWeight: "600",
+    fontSize: "14px",
     cursor: "pointer",
     transition: "background-color 0.3s",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
     fontSize: "15px",
+    marginTop: "20px",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    overflow: "hidden",
+    boxShadow: "0 8px 18px rgba(0,0,0,0.06)",
   },
   th: {
     textAlign: "left",
-    padding: "12px 10px",
-    fontWeight: "bold",
-    borderBottom: "2px solid #ddd",
+    padding: "14px 16px",
+    fontWeight: "600",
+    borderBottom: "2px solid #e4dffa",
+    backgroundColor: "#f4f1fc",
     color: "#555",
   },
   td: {
-    padding: "10px 10px",
+    padding: "14px 16px",
     color: "#333",
     fontSize: "14px",
+    verticalAlign: "middle",
   },
   badge: {
-    padding: "6px 10px",
+    padding: "6px 12px",
     borderRadius: "8px",
     fontSize: "13px",
     fontWeight: "600",
     color: "#fff",
     textTransform: "capitalize",
     display: "inline-block",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
   },
   select: (disabled) => ({
     padding: "8px 12px",
@@ -199,6 +223,8 @@ const styles = {
     border: "1px solid #ccc",
     cursor: disabled ? "not-allowed" : "pointer",
     fontSize: "14px",
+    backgroundColor: disabled ? "#f0f0f0" : "#fff",
+    transition: "border-color 0.3s",
   }),
 };
 

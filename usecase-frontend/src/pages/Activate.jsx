@@ -107,7 +107,7 @@ export default function Activate() {
             disabled={loading}
             style={{
               ...styles.button,
-              backgroundColor: loading ? "#b9a5df" : "#6c3fc9",
+              backgroundColor: loading ? "#c19fd9" : "#9b59b6",
               cursor: loading ? "not-allowed" : "pointer",
             }}
             aria-busy={loading}
@@ -130,42 +130,44 @@ export default function Activate() {
 const styles = {
   container: {
     minHeight: "100vh",
-    background: "linear-gradient(to right, #ece9f1, #fdfbff)",
+    background: "linear-gradient(to right, #ffdde1, #f7bb97)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+    padding: "1rem",
   },
   card: {
     backgroundColor: "#ffffff",
-    padding: "40px 30px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
+    padding: "3rem 2.5rem",
+    borderRadius: "20px",
+    boxShadow: "0 12px 32px rgba(0, 0, 0, 0.2)",
     maxWidth: "420px",
     width: "100%",
   },
   title: {
     textAlign: "center",
-    marginBottom: "25px",
-    color: "#6c3fc9",
-    fontSize: "24px",
+    marginBottom: "30px",
+    color: "#9b59b6",
+    fontSize: "28px",
+    fontWeight: "700",
   },
   label: {
     display: "block",
-    marginBottom: "8px",
+    marginBottom: "6px",
     fontWeight: "600",
-    color: "#555",
+    color: "#333",
     fontSize: "14px",
   },
   input: {
     width: "100%",
-    padding: "10px 12px",
+    padding: "12px 14px",
     borderRadius: "10px",
     border: "1px solid #ccc",
     fontSize: "15px",
     outline: "none",
     marginBottom: "20px",
-    transition: "border-color 0.3s",
+    transition: "border-color 0.3s, box-shadow 0.3s",
     boxSizing: "border-box",
   },
   button: {
@@ -176,18 +178,17 @@ const styles = {
     color: "#fff",
     fontWeight: "600",
     fontSize: "16px",
-    transition: "background-color 0.3s",
+    transition: "background-color 0.3s, transform 0.2s",
   },
   footerText: {
-    marginTop: "20px",
+    marginTop: "25px",
     textAlign: "center",
     color: "#555",
     fontSize: "14px",
   },
   link: {
-    color: "#6c3fc9",
+    color: "#9b59b6",
     textDecoration: "none",
     fontWeight: "600",
   },
 };
-  

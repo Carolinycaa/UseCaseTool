@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const UserActivation = sequelize.define(
-  "userActivation", // nome da tabela, respeitando o que tem no banco
+  "userActivation", 
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,7 +12,7 @@ const UserActivation = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "userId", // campo no banco, já está assim mesmo
+      field: "userId", 
     },
     activationCode: {
       type: DataTypes.STRING,
@@ -33,7 +33,7 @@ const UserActivation = sequelize.define(
   {
     tableName: "userActivation",
     timestamps: true,
-    underscored: false, // porque tabela não está com snake_case
+    underscored: false, 
   }
 );
 

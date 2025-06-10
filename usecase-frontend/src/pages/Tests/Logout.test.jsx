@@ -1,30 +1,36 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Logout from "../Logout";
+
 import { MemoryRouter } from "react-router-dom";
 
-// Mock de useNavigate
+// Mock useNavigate
 const mockNavigate = jest.fn();
-
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
-
-beforeEach(() => {
-  localStorage.setItem("token", "fake-token");
-  jest.useFakeTimers();
-  mockNavigate.mockClear();
+jest.mock("react-router-dom", () => {
+  const actual = jest.requireActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
 });
 
-afterEach(() => {
-  jest.runOnlyPendingTimers();
-  jest.useRealTimers();
-  localStorage.clear();
-});
+describe("Logout Component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    localStorage.setItem("token", "fake-token");
+  });
 
-describe("Logout", () => {
-  test("remove o token e redireciona após 1 segundo", () => {
+  it("remove o token do localStorage ao montar", () => {
+    render(
+      <MemoryRouter>
+        <Logout />
+      </MemoryRouter>
+    );
+
+    expect(localStorage.getItem("token")).toBeNull();
+  });
+
+  it("renderiza mensagem de saída", () => {
     render(
       <MemoryRouter>
         <Logout />
@@ -32,11 +38,25 @@ describe("Logout", () => {
     );
 
     expect(screen.getByText(/saindo da conta/i)).toBeInTheDocument();
-    expect(localStorage.getItem("token")).toBeNull();
+    expect(screen.getByText(/você será redirecionado/i)).toBeInTheDocument();
+  });
+
+  it("redireciona após 1 segundo", async () => {
+    jest.useFakeTimers();
+
+    render(
+      <MemoryRouter>
+        <Logout />
+      </MemoryRouter>
+    );
 
     // Avança o tempo simulado
     jest.advanceTimersByTime(1000);
 
-    expect(mockNavigate).toHaveBeenCalledWith("/", { replace: true });
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/", { replace: true });
+    });
+
+    jest.useRealTimers();
   });
 });
